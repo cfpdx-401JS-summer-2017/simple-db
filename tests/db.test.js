@@ -3,6 +3,7 @@ const path = require('path');
 const rimraf = require('rimraf');
 const db = require('../lib/db');
 
+
 describe('db', () => {
 
     // mocha runs before blocks sequentially, in order.
@@ -46,15 +47,22 @@ describe('db', () => {
     });
 
     // 3. use the store in tests
-    it('saves animal', done => {
-        // call save
-        animals.save({ type: 'cat', name: 'garfield' }, (err, animal) => {
-            if(err) return done(err);
-            // test has, id, props match, etc, etc, 
-            assert.equal(animal.type, 'cat');
-            // moar tests...
-            done();
+    describe('save', () => {
+        it('saves animal and gives it and ID', done => {
+            // call save
+            animals.save({ type: 'cat', name: 'garfield'}, (err, animal) => {
+                if(err) return done(err);
+                // test has, id, props match, etc, etc, 
+                assert.equal(animal.type, 'cat');
+                assert.equal(animal.name, 'garfield');
+                assert.ok(animal._id);
+                // moar tests...
+                done();
+            });
         });
-    });
-    it.skip('gives an id');
+        it.skip('');
+
+    }); 
+
+    
 });
