@@ -24,6 +24,7 @@ describe('db', () => {
     // declare variable out here so we have access in
     // the "it" tests...
     let animals = null;
+    let garfield = null;
     // 2. create an animal store ("table")
     // (you can use whatever domain "thing" you want)
     before(done => {
@@ -53,6 +54,7 @@ describe('db', () => {
             animals.save({ type: 'cat', name: 'garfield'}, (err, animal) => {
                 if(err) return done(err);
                 // test has, id, props match, etc, etc, 
+                garfield = animal;
                 assert.equal(animal.type, 'cat');
                 assert.equal(animal.name, 'garfield');
                 assert.ok(animal._id);
@@ -60,9 +62,22 @@ describe('db', () => {
                 done();
             });
         });
-        it.skip('');
 
     }); 
+    describe('get', () => {
+        it('returns the object from the requested table that has that id', (done)  => {
+            animals.get(garfield._id, (err, animal) => {
+                if (err) return done(err);
+                assert.equal(animal._id, garfield._id);
+
+            
+                done();
+            });
+
+
+        });
+
+    });
 
     
 });
