@@ -28,7 +28,8 @@ const buildings = db.createTable('buildings');
 Use a class for your return store that takes the directory that it should use in the constructor:
 
 ```js
-return new Store(path.join(rootDir, tablename));
+// inside createTable:
+return new Store(path.join(this.rootDir, tablename));
 ```
 
 The store offers `save`, `get`, `getAll`, and `remove` methods.
