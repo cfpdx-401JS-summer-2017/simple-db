@@ -22,6 +22,10 @@
   "homepage": "https://github.com/anwarmontasir/simple-db#readme",
   "devDependencies": {
     "eslint": "^4.2.0",
-    "mocha": "^3.4.2"
+    "mocha": "^3.4.2",
+    "rimraf": "^2.6.1"
+  },
+  "dependencies": {
+    "mkdirp": "^0.5.1"
   }
 }
