@@ -1,6 +1,6 @@
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf'); //rimfraf');
+const rimraf = require('rimraf');
 const db = require('../lib/db'); // root directory
 
 describe('simple database', () => {
@@ -41,9 +41,17 @@ describe('simple database', () => {
         books.save({ author: 'Dr. Seuss', title: 'The Cat in the Hat' }, (err, book) => {
             if(err) return done(err);
             assert.equal(book.author, 'Dr. Seuss');
-            // moar tests...
-            // make assertions against properties
+            assert.equal(book.title, 'The Cat in the Hat');
             done();
         });
     });
+
+    it('saves a new magazine with JSON content', done => {
+        magazines.save({ publisher: 'Condé Nast', title: 'The New Yorker' }, (err, magazine) => {
+            if(err) return done(err);
+            assert.equal(magazine.publisher, 'Condé Nast');
+            done();
+        });
+    });
+
 });
