@@ -71,6 +71,7 @@ Here is an example of how your module might be imported (required) and used:
 
 ```js
 const db = require('./db');
+db.rootDir = path.join(__dirname, 'data');
 
 const animals = db.createTable('animals');
 
