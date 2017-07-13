@@ -3,7 +3,7 @@
 
 ## Doc/Resources
 * [Node fs docs](https://nodejs.org/api/fs.html) - specifically the methods `readFile` and `writeFile`
-* [Node path docs](https://nodejs.org/api/path.html) - specifically the methods `readFile` and `writeFile`
+* [Node path docs](https://nodejs.org/api/path.html) - specifically the methods `join`
 
 * JSON [stringify](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) 
 and [parse](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse)
@@ -75,6 +75,7 @@ animals.getAll((err, animals) => {
   if(err) return console.log('ERROR', err);
   console.log('we have', animals.length, 'animals');
 });
+```
 
 Make sure to test:
 
