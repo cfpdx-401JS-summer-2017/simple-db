@@ -15,13 +15,13 @@ describe('db', () => {
     let alcohol = null;
     before(done => {
         db.rootDir = TEST_DIR;
-        db.createTable = ('alcohol', (err, store) => {
+        db.createTable('alcohol', (err, store) => {
             if(err) return done(err);
             alcohol = store;
             done();
         });
     });
-    it('saves alcohol to the db', (done) => {
+    it('saves alcohol to the db', done => {
         alcohol.save({type: 'beer', name: 'IPA'}, (err, alcohol) => {
             if(err) return done(err);
             
