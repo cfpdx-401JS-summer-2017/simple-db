@@ -40,6 +40,7 @@ describe('simple database', () => {
     it('saves a new book with JSON content', done => {
         books.save({ author: 'Dr. Seuss', title: 'The Cat in the Hat' }, (err, book) => {
             if(err) return done(err);
+            // QUESTION: should this parse the JSON?
             assert.equal(book.author, 'Dr. Seuss');
             assert.equal(book.title, 'The Cat in the Hat');
             done();
@@ -50,6 +51,7 @@ describe('simple database', () => {
         magazines.save({ publisher: 'Condé Nast', title: 'The New Yorker' }, (err, magazine) => {
             if(err) return done(err);
             assert.equal(magazine.publisher, 'Condé Nast');
+            assert.equal(magazine.title, 'The New Yorker');
             done();
         });
     });
