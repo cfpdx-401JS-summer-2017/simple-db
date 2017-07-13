@@ -16,5 +16,16 @@
   "bugs": {
     "url": "https://github.com/Thomson42/simple-db/issues"
   },
-  "homepage": "https://github.com/Thomson42/simple-db#readme"
+  "homepage": "https://github.com/Thomson42/simple-db#readme",
+  "dependencies": {
+    "mkdirp": "^0.5.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.2.0",
+    "file-system": "^2.2.2",
+    "mocha": "^3.4.2",
+    "path": "^0.12.7",
+    "rimraf": "^2.6.1",
+    "shortid": "^2.2.8"
+  }
 }
