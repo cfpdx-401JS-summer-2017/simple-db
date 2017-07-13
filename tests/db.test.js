@@ -46,12 +46,32 @@ describe('db', () => {
     });
 
     // 3. use the store in tests
-    it('saves animal', done => {
+    it('saves animal type', done => {
         // call save
         animals.save({ type: 'cat', name: 'garfield' }, (err, animal) => {
             if(err) return done(err);
             // test has, id, props match, etc, etc, 
             assert.equal(animal.type, 'cat');
+            // moar tests...
+            done();
+        });
+    });
+    it('saves animal name', done => {
+        // call save
+        animals.save({ type: 'cat', name: 'garfield' }, (err, animal) => {
+            if(err) return done(err);
+            // test has, id, props match, etc, etc, 
+            assert.equal(animal.name, 'garfield');
+            // moar tests...
+            done();
+        });
+    });
+    it('saves animal type', done => {
+        // call save
+        animals.save({ type: 'cat', name: 'garfield' }, (err, animal) => {
+            if(err) return done(err);
+            // test has, id, props match, etc, etc, 
+            assert.ok(animal._id);
             // moar tests...
             done();
         });
