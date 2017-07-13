@@ -12,7 +12,10 @@ describe('db', () => {
             else done();
         });
     });
+
     let alcohol = null;
+    let ipa = null;
+
     before(done => {
         db.rootDir = TEST_DIR;
         db.createTable('alcohol', (err, store) => {
@@ -21,13 +24,27 @@ describe('db', () => {
             done();
         });
     });
+
     it('saves alcohol to the db', done => {
-        alcohol.save({type: 'beer', name: 'IPA'}, (err, alcohol) => {
+        alcohol.save({type: 'beer', name: 'IPA'}, (err, savedBeer) => {
             if(err) return done(err);
-            
-            assert.equal(alcohol.type, 'beer');
+            ipa = savedBeer;
+            assert.equal(savedBeer.type, 'beer');
+            assert.equal(savedBeer.name, 'IPA');
+            assert.ok(savedBeer._id);
             done();
         });
     });
+
+    it('gets alcohol by id', done => {
+        alcohol.get(ipa._id, (err, beer) => {
+            if(err) return done(err);
+            console.log(beer);
+            assert.equal(beer._id, ipa._id);
+            done();
+        });
+
+    });
+
 });
 
