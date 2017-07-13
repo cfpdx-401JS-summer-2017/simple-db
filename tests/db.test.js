@@ -46,9 +46,10 @@ describe('db', () => {
     });
 
     // 3. use the store in tests
+    let garfield = {type: 'cat', name: 'garfield'};
     it('saves animal type', done => {
         // call save
-        animals.save({ type: 'cat', name: 'garfield' }, (err, animal) => {
+        animals.save(garfield, (err, animal) => {
             if(err) return done(err);
             // test has, id, props match, etc, etc, 
             assert.equal(animal.type, 'cat');
@@ -58,7 +59,7 @@ describe('db', () => {
     });
     it('saves animal name', done => {
         // call save
-        animals.save({ type: 'cat', name: 'garfield' }, (err, animal) => {
+        animals.save(garfield, (err, animal) => {
             if(err) return done(err);
             // test has, id, props match, etc, etc, 
             assert.equal(animal.name, 'garfield');
@@ -68,7 +69,7 @@ describe('db', () => {
     });
     it('saves animal type', done => {
         // call save
-        animals.save({ type: 'cat', name: 'garfield' }, (err, animal) => {
+        animals.save(garfield, (err, animal) => {
             if(err) return done(err);
             // test has, id, props match, etc, etc, 
             assert.ok(animal._id);
@@ -76,4 +77,6 @@ describe('db', () => {
             done();
         });
     });
+    
 });
+

@@ -23,6 +23,11 @@
   "homepage": "https://github.com/AMPotter/simple-db#readme",
   "devDependencies": {
     "eslint": "^4.2.0",
-    "mocha": "^3.4.2"
+    "mocha": "^3.4.2",
+    "rimraf": "^2.6.1"
+  },
+  "dependencies": {
+    "mkdir": "0.0.2",
+    "shortid": "^2.2.8"
   }
 }
