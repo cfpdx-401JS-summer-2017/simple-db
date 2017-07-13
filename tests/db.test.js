@@ -47,36 +47,31 @@ describe('db', () => {
 
     // 3. use the store in tests
     let garfield = {type: 'cat', name: 'garfield'};
-    it('saves animal type', done => {
+    it('saves animal', done => {
         // call save
         animals.save(garfield, (err, animal) => {
             if(err) return done(err);
             // test has, id, props match, etc, etc, 
             assert.equal(animal.type, 'cat');
-            // moar tests...
-            done();
-        });
-    });
-    it('saves animal name', done => {
-        // call save
-        animals.save(garfield, (err, animal) => {
-            if(err) return done(err);
-            // test has, id, props match, etc, etc, 
             assert.equal(animal.name, 'garfield');
-            // moar tests...
-            done();
-        });
-    });
-    it('saves animal type', done => {
-        // call save
-        animals.save(garfield, (err, animal) => {
-            if(err) return done(err);
-            // test has, id, props match, etc, etc, 
             assert.ok(animal._id);
             // moar tests...
             done();
         });
     });
     
+    it('gets a saved object by id', done => {
+        const savedAnimal = animals.save(garfield, (err, animal) => {
+            if (err) throw err;
+            return animal;
+        });
+
+        const gotAnimal = animals.get(savedAnimal._id, (err, animal) => {
+            if (err) return done(err);
+            return animal;
+        });
+        assert.deepEqual(gotAnimal, savedAnimal);
+    });
+
 });
 
