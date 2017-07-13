@@ -1,0 +1,32 @@
+{
+  "name": "simple-db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha tests",
+    "start": "npm test -- -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anwarmontasir/simple-db.git"
+  },
+  "author": "Anwar Montasir, Mark Petrie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anwarmontasir/simple-db/issues"
+  },
+  "homepage": "https://github.com/anwarmontasir/simple-db#readme",
+  "devDependencies": {
+    "eslint": "^4.2.0",
+    "mocha": "^3.4.2",
+    "rimraf": "^2.6.1"
+  },
+  "dependencies": {
+    "mkdirp": "^0.5.1"
+  }
+}
