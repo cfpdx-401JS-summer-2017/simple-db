@@ -11,10 +11,25 @@ and [parse](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Gl
 
 ## Description:
 
-You library exports a single, global db that has a createTable method that returns a store
-for that type of object ("table"). The global db has a hard-coded (file path relative) root directory.
+You library exports a single, global db that has a:
+* `rootDir` property to set the root dir:
+```js
+const db = require('../lib/db');
+db.rootDir = __dirname + '/test';
+```
+* `createTable` method that returns a store:
+```js
+const db = require('../lib/db');
+db.rootDir = __dirname + '/test';
+const animals = db.createTable('animals');
+const buildings = db.createTable('buildings');
+```
 
-Use a class for your store that takes the directory that it should use in the constructor.
+Use a class for your return store that takes the directory that it should use in the constructor:
+
+```js
+return new Store(path.join(rootDir, tablename));
+```
 
 The store offers `save`, `get`, `getAll`, and `remove` methods.
 
