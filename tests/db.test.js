@@ -1,11 +1,13 @@
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimfraf');
+const rimraf = require('rimraf'); //rimfraf');
 const db = require('../lib/db'); // root directory
 
 describe('simple database', () => {
-    const TEST_DIR = path.join(__dirname, 'test');
+    // set the root directory for test
+    const TEST_DIR = path.join(__dirname, 'data');
 
+    // delete test data directory
     before(done => {
         rimraf(TEST_DIR, err => {
             if(err) done(err);
@@ -13,32 +15,32 @@ describe('simple database', () => {
         });
     });
     
-    let animals = null;
+    let books = null;
+
     before(done => {
         db.rootDir = TEST_DIR;
         db.createTable('books', (err, store) => {
             if(err) return done(err);
-            animals = store;
+            books = store;
             done();
         });
     });
 
-    let buildings = null;
+    let magazines = null;
+
     before(done => {
         db.rootDir = TEST_DIR;
-        db.createTable('buildings', (err, store) => {
+        db.createTable('magazines', (err, store) => {
             if(err) return done(err);
-            buildings = store;
+            magazines = store;
             done();
         });
     });
 
-    it('saves animal', done => {
-        // call save
-        animals.save({ type: 'cat', name: 'garfield' }, (err, animal) => {
+    it('saves a new book with JSON content', done => {
+        books.save({ author: 'Dr. Seuss', title: 'The Cat in the Hat' }, (err, book) => {
             if(err) return done(err);
-            // test has, id, props match, etc, etc, 
-            assert.equal(animal.type, 'cat');
+            assert.equal(book.author, 'Dr. Seuss');
             // moar tests...
             // make assertions against properties
             done();
