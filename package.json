@@ -1,0 +1,28 @@
+{
+  "name": "simple-db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "mocha tests",
+    "start": "npm run test -- -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AMPotter/simple-db.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AMPotter/simple-db/issues"
+  },
+  "homepage": "https://github.com/AMPotter/simple-db#readme",
+  "devDependencies": {
+    "eslint": "^4.2.0",
+    "mocha": "^3.4.2"
+  }
+}
