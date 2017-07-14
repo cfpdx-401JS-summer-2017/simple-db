@@ -76,6 +76,17 @@ describe('db', () => {
 
 
         });
+        it('return null if that id does not exist', (done)  => {
+            animals.get(3, (err, animal) => {
+                if (err) return done(err);
+                assert.equal(animal,null);
+
+            
+                done();
+            });
+
+
+        });
 
     });
 
