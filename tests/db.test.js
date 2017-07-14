@@ -47,6 +47,8 @@ describe('db', () => {
 
     // 3. use the store in tests
     let garfield = {type: 'cat', name: 'garfield'};
+    let felix = {type: 'cat', name: 'felix'};
+    let otis = {type: 'cat', name: 'otis'};
     let savedAnimal = null;
 
     it('saves animal', done => {
@@ -91,6 +93,17 @@ describe('db', () => {
         animals.remove('hey mom', (err, response) => {
             if (err) return done(err);
             assert.deepEqual(response, { removed: false });
+            done();
+        });
+    });
+
+    it('returns an array of all objects from the requested table', done => {
+        animals.save(garfield);
+        animals.save(felix);
+        animals.save(otis);
+        animals.getAll((err, allGot)=>{
+            if(err) return done(err);
+            assert.deepEqual(allGot, [{type: 'cat', name: 'garfield'}, {type: 'cat', name: 'felix'}, {type: 'cat', name: 'otis'}]);
             done();
         });
     });
