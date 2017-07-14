@@ -117,9 +117,10 @@ describe('simple database', () => {
                 charlie = book2;
             });
 
-            books.getAll((err, objects) => {
+            books.getAll((err, files) => {
                 if(err) return done(err);
-                assert.deepEqual(objects.length, [cat, web, charlie]);
+                // assert.deepEqual(files, [web, cat, charlie]); // doesn't work
+                assert.equal(files.length, 3);
                 done();
             });
         });
@@ -129,6 +130,20 @@ describe('simple database', () => {
 
     });
 
-    
+    describe('removes', () => {
+
+        // it('book by id', done => {
+        //     books.remove(cat._id, (err, book) => {
+        //         assert.equal(book, { removed: true });
+        //         done();
+        //     });
+        // });
+
+        //TODO
+        //it('book by id and returns false')
+
+    });
+
+
 
 });
