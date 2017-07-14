@@ -132,18 +132,19 @@ describe('simple database', () => {
 
     describe('removes', () => {
 
-        // it('book by id', done => {
-        //     books.remove(cat._id, (err, book) => {
-        //         assert.equal(book, { removed: true });
-        //         done();
-        //     });
-        // });
+        it('book by id', done => {
+            books.remove(cat._id, (err, status) => {
+                assert.deepEqual(status, { removed: true });
+                done();
+            });
+        });
 
-        //TODO
-        //it('book by id and returns false')
+        it('book by id returns false', done => {
+            books.remove('id-dont-exist', (err, status) => {
+                assert.deepEqual(status, { removed: false });
+                done();
+            });
+        });
 
     });
-
-
-
 });
