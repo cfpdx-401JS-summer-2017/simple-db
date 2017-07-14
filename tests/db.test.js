@@ -47,10 +47,13 @@ describe('db', () => {
 
     // 3. use the store in tests
     let garfield = {type: 'cat', name: 'garfield'};
+    let savedAnimal = null;
+
     it('saves animal', done => {
         // call save
         animals.save(garfield, (err, animal) => {
             if(err) return done(err);
+            savedAnimal = animal;
             // test has, id, props match, etc, etc, 
             assert.equal(animal.type, 'cat');
             assert.equal(animal.name, 'garfield');
@@ -61,16 +64,11 @@ describe('db', () => {
     });
     
     it('gets a saved object by id', done => {
-        const savedAnimal = animals.save(garfield, (err, animal) => {
-            if (err) throw err;
-            return animal;
-        });
-
-        const gotAnimal = animals.get(savedAnimal._id, (err, animal) => {
+        animals.get(savedAnimal._id, (err, animal) => {
             if (err) return done(err);
-            return animal;
+            assert.deepEqual(animal, savedAnimal);
+            done();
         });
-        assert.deepEqual(gotAnimal, savedAnimal);
     });
 
 });
