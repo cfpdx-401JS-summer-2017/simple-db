@@ -51,7 +51,7 @@ describe('db', () => {
         alcohol.save({type: 'hardA', name: 'gin'}, (err, saved) => {
             if(err) return done(err);
             drinks.push(saved);
-        } );
+        });
         alcohol.getAll((err, alcoholArray) => {
             if (err) return done(err);
             assert.deepEqual(alcoholArray, drinks);
@@ -62,12 +62,13 @@ describe('db', () => {
 
     });
 
-    // it('removes alcohol by id', done => {
-    //     alcohol.remove(ipa._id, (err, beer) => {
-    //         if (err) return done (err);
-    //         assert.equal(beer, {removed: true});
-    //     });
-    // });
+    it('removes alcohol by id', done => {
+        alcohol.remove(ipa._id, (err, data) => {
+            if (err) return done (err);
+            assert.deepEqual(data, {removed: true});
+            done();
+        });
+    });
 
 });
 
