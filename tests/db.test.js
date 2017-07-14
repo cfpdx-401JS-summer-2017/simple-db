@@ -71,7 +71,7 @@ describe('db', () => {
         });
     });
 
-    it('returns null if no id does not exist', done => {
+    it('returns null if id does not exist', done => {
         animals.get('hey mom', (err, animal) => {
             if (err) return done(err);
             assert.equal(animal, null);
@@ -79,5 +79,20 @@ describe('db', () => {
         });
     });
 
+    it('removes an object from the db as specified from a supplied id', done => {
+        animals.remove(savedAnimal._id, (err, response) => {
+            if(err) return done(err);
+            assert.deepEqual(response, { removed: true });
+            done();
+        });
+    });
+
+    it('returns {removed: false} if remove does not occur', done => {
+        animals.remove('hey mom', (err, response) => {
+            if (err) return done(err);
+            assert.deepEqual(response, { removed: false });
+            done();
+        });
+    });
 });
 
