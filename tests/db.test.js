@@ -16,6 +16,8 @@ describe('simple database', () => {
     
     let books = null;
     let cat = null;
+    let web = null;
+    let charlie = null;
 
     before(done => {
         db.rootDir = TEST_DIR;
@@ -40,7 +42,7 @@ describe('simple database', () => {
 
     describe('saves', () => {
 
-        it('saves a new book with JSON content', done => {
+        it('new book with JSON content', done => {
             books.save({ author: 'Dr. Seuss', title: 'The Cat in the Hat' }, (err, book) => {
                 if(err) return done(err);
                 cat = book;
@@ -52,7 +54,7 @@ describe('simple database', () => {
             });
         });
 
-        it('saves a new magazine with JSON content', done => {
+        it('new magazine with JSON content', done => {
             magazines.save({ publisher: 'Condé Nast', title: 'The New Yorker' }, (err, magazine) => {
                 if(err) return done(err);
                 newyork = magazine;
@@ -67,7 +69,7 @@ describe('simple database', () => {
 
     describe('gets', () => {
 
-        it('gets a book by id', done => {
+        it('book by id', done => {
             books.get(cat._id, (err, book) => {
                 if(err) return done(err);
                 assert.equal(book._id, cat._id);
@@ -75,7 +77,15 @@ describe('simple database', () => {
             });
         });
 
-        it('gets a book that does not exist and returns null', done => {
+        it('magazine by id', done => {
+            magazines.get(newyork._id, (err, magazine) => {
+                if(err) return done(err);
+                assert.equal(magazine._id, newyork._id);
+                done();
+            });
+        });
+
+        it('book that does not exist and returns null', done => {
             books.get('not-a-real-id', (err, book) => {
                 if(err) return done(err);
                 assert.equal(book, null);
@@ -83,9 +93,40 @@ describe('simple database', () => {
             });
         });
 
+        it('magazine that does not exist and returns null', done => {
+            magazines.get('non-existent-id', (err, magazine) => {
+                if(err) return done(err);
+                assert.equal(magazine, null);
+                done();
+            });
+        });
+
     });
 
     describe('gets all', () => {
+        
+        it('books and returns array', done => {
+            // QUESTION: should I add more books?
+
+            books.save({ author: 'E. B. White', title: 'Charlotte\'s Web' }, (err, book1) => {
+                if(err) return done(err);
+                web = book1;
+            });
+
+            books.save({ author: 'Roald Dahl', title: 'Charlie and the Chocolate Factory' }, (err, book2) => {
+                if(err) return done(err);
+                charlie = book2;
+            });
+
+            books.getAll((err, objects) => {
+                if(err) return done(err);
+                
+                assert.equal(objects.length, 3);
+                done();
+            });
+        });
+
+        // it('gets all magazines')
 
     });
 
