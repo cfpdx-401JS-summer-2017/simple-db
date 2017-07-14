@@ -50,14 +50,20 @@ describe('db', () => {
             assert.ok(id);
             assert.ok(fs.readFileSync(filePath));
 
-            animals.get(filePath, (err, cat) => {
+            animals.get(id, (err, cat) => {
                 if(err) return done(err);
                 assert.deepEqual(animal, cat);
             });
 
-            done();
+            animals.remove(id, (err, callback) => {
+                if(err) return done(err);
+                console.log('callback: ' + callback.removed);
+                assert.equal(callback.removed, true);
+                done();
+            });
         });
     });
+
     it('saves buildings', done => {
         buildings.save({ type: 'pretty', name: 'Falling Water'}, (err, building) => {
             if (err) return done(err);
@@ -76,6 +82,7 @@ describe('db', () => {
 
             done();
         });
+        
     });
 
 });
