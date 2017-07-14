@@ -98,12 +98,11 @@ describe('db', () => {
     });
 
     it('returns an array of all objects from the requested table', done => {
-        animals.save(garfield);
-        animals.save(felix);
-        animals.save(otis);
-        animals.getAll((err, allGot)=>{
-            if(err) return done(err);
-            assert.deepEqual(allGot, [{type: 'cat', name: 'garfield'}, {type: 'cat', name: 'felix'}, {type: 'cat', name: 'otis'}]);
+        const savedGarfield = animals.save(garfield, () =>{});
+        const savedFelix = animals.save(felix, () =>{});
+        const savedOtis = animals.save(otis, () =>{});
+        animals.getAll(allGot=>{
+            assert.deepEqual(allGot, [savedOtis,savedFelix,savedGarfield]);
             done();
         });
     });
