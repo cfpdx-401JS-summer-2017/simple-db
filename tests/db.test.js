@@ -84,17 +84,6 @@ describe('db', () => {
         });
     });
 
-    describe('getAll', () => {
-        it('returns empty array if no objects found', (done) => {
-            animals.getAll((err, allObj) => {
-                if (err) return done(err);
-                assert.deepEqual(allObj, []);
-
-                done();
-            });
-        });
-    });
-
     describe('remove', () => {
         it('removes the object and returns removed: true', (done) => {
             animals.remove(garfield._id, (err, animal) => {
@@ -112,9 +101,18 @@ describe('db', () => {
                 assert.deepEqual(animal, { removed: false });
                 done();
             });
-
         });
     });
+    
+    describe('getAll', () => {
+        it('returns empty array if no objects found', (done) => {
+            animals.getAll((err, testObjs) => {
+                if (err) return done(err);
+                assert.deepEqual(testObjs, []);
 
+                done();
+            });
+        });
+    });
 
 });
