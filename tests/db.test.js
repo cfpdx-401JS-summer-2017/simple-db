@@ -70,25 +70,31 @@ describe('db', () => {
                 if (err) return done(err);
                 assert.equal(animal._id, garfield._id);
 
-            
                 done();
             });
-
 
         });
         it('return null if that id does not exist', (done)  => {
             animals.get(3, (err, animal) => {
                 if (err) return done(err);
-                assert.equal(animal,null);
+                assert.equal(animal, null);
 
-            
+                done();
+            });
+        });
+    });
+
+    describe('remove', () => {
+        it('removes the object', (done)=> {
+            animals.remove(garfield._id, (err, animal) => {
+                if (err) return done(err);
+                assert.deepEqual(animal, { removed: true });
+
                 done();
             });
 
-
         });
-
     });
 
-    
+
 });
