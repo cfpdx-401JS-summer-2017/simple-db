@@ -37,7 +37,7 @@ describe('db', () => {
         });
     });
 
-    it('saves and gets animal', done => {
+    it('saves animal', done => {
         animals.save({ type: 'cat', name: 'garfield' }, (err, animal) => {
 
             if (err) return done(err);
@@ -49,15 +49,38 @@ describe('db', () => {
             assert.equal(animal.name, 'garfield');
             assert.ok(id);
             assert.ok(fs.readFileSync(filePath));
+            done();
 
-            animals.get(id, (err, cat) => {
+        });
+    });
+
+    it('gets animal', done => {
+        animals.save({ type: 'dog', name: 'snoopy' }, (err, animal) => {
+
+            if (err) return done(err);
+
+            const id = animal._id;
+
+            animals.get(id, (err, dog) => {
                 if(err) return done(err);
-                assert.deepEqual(animal, cat);
+                assert.deepEqual(animal, dog);
+                done();
             });
+        });
+    });
+
+    it('removes animal', done => {
+        animals.save({ type: 'bird', name: 'tweety' }, (err, animal) => {
+
+            if (err) return done(err);
+
+            const id = animal._id;
+            const filePath = path.join(TEST_DIR, 'animals/' + animal._id + '.json');
+
+            assert.ok(fs.readFileSync(filePath));
 
             animals.remove(id, (err, callback) => {
                 if(err) return done(err);
-                console.log('callback: ' + callback.removed);
                 assert.equal(callback.removed, true);
                 done();
             });
