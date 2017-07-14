@@ -30,6 +30,8 @@ describe('simple database', () => {
 
     let magazines = null;
     let newyork = null;
+    let natgeo = null;
+    let time = null;
 
     before(done => {
         db.rootDir = TEST_DIR;
@@ -126,7 +128,25 @@ describe('simple database', () => {
         });
 
         // it('books and returns empty array')
-        // it('gets all magazines')
+        
+        it('magazines and returns array', done => {
+            // add magazine
+            magazines.save({ publisher: 'National Geographic Society', title: 'National Geographic' }, (err, mag1) => {
+                if(err) return done(err);
+                natgeo = mag1;
+            });
+            // add magazine
+            magazines.save({ publisher: 'Time Inc.', title: 'Time' }, (err, mag2) => {
+                if(err) return done(err);
+                charlie = mag2;
+            });
+
+            magazines.getAll((err, files) => {
+                if(err) return done(err);
+                assert.equal(files.length, 3);
+                done();
+            });
+        });
 
     });
 
@@ -139,8 +159,8 @@ describe('simple database', () => {
             });
         });
 
-        it('book by id returns false', done => {
-            books.remove('id-dont-exist', (err, status) => {
+        it('magazine by id returns false', done => {
+            magazines.remove('id-dont-exist', (err, status) => {
                 assert.deepEqual(status, { removed: false });
                 done();
             });
