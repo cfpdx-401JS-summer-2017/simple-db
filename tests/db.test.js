@@ -27,7 +27,7 @@ describe('simple database', () => {
     });
 
     let magazines = null;
-    let ny = null
+    let newyork = null;
 
     before(done => {
         db.rootDir = TEST_DIR;
@@ -38,46 +38,51 @@ describe('simple database', () => {
         });
     });
 
-    it('saves a new book with JSON content', done => {
-        books.save({ author: 'Dr. Seuss', title: 'The Cat in the Hat' }, (err, book) => {
-            if(err) return done(err);
-            cat = book;
+    describe('saves', () => {
 
-            assert.equal(book.author, 'Dr. Seuss');
-            assert.equal(book.title, 'The Cat in the Hat');
-            assert.ok(book._id);
-            done();
+        it('saves a new book with JSON content', done => {
+            books.save({ author: 'Dr. Seuss', title: 'The Cat in the Hat' }, (err, book) => {
+                if(err) return done(err);
+                cat = book;
+
+                assert.equal(book.author, 'Dr. Seuss');
+                assert.equal(book.title, 'The Cat in the Hat');
+                assert.ok(book._id);
+                done();
+            });
         });
+
+        it('saves a new magazine with JSON content', done => {
+            magazines.save({ publisher: 'Condé Nast', title: 'The New Yorker' }, (err, magazine) => {
+                if(err) return done(err);
+                newyork = magazine;
+                assert.equal(magazine.publisher, 'Condé Nast');
+                assert.equal(magazine.title, 'The New Yorker');
+                assert.ok(magazine._id);
+                done();
+            });
+        });
+
     });
 
-    it('saves a new magazine with JSON content', done => {
-        magazines.save({ publisher: 'Condé Nast', title: 'The New Yorker' }, (err, magazine) => {
-            if(err) return done(err);
-            ny = magazine;
+    describe('gets', () => {
 
-            assert.equal(magazine.publisher, 'Condé Nast');
-            assert.equal(magazine.title, 'The New Yorker');
-            assert.ok(magazine._id);
-            done();
+        it('gets a book by id', done => {
+            books.get(cat._id, (err, book) => {
+                if(err) return done(err);
+                assert.equal(book._id, cat._id);
+                done();
+            });
         });
-    });
 
-    it('gets a book by id', done => {
-        books.get(cat._id, (err, book) => {
-            if(err) return done(err);
-
-            assert.equal(book._id, cat._id);
-            done();
+        it('gets a book that does not exist and returns null', done => {
+            books.get('not-a-real-id', (err, book) => {
+                if(err) return done(err);
+                assert.equal(book, null);
+                done();
+            });
         });
-    });
 
-    it('gets a book null', done => {
-        books.get('wefoijwefoi', (err, book) => {
-            if(err) return done(err);
-
-            assert.equal(book, null);
-            done();
-        });
     });
 
 });
