@@ -37,14 +37,23 @@ describe('db', () => {
         });
     });
 
-    it('saves animal', done => {
+    it('saves and gets animal', done => {
         animals.save({ type: 'cat', name: 'garfield' }, (err, animal) => {
 
             if (err) return done(err);
+
+            const id = animal._id;
+            const filePath = path.join(TEST_DIR, 'animals/' + animal._id + '.json');
+
             assert.equal(animal.type, 'cat');
             assert.equal(animal.name, 'garfield');
-            assert.ok(animal._id);
-            assert.ok(fs.readFileSync(path.join(TEST_DIR, 'animals/' + animal._id + '.json')));
+            assert.ok(id);
+            assert.ok(fs.readFileSync(filePath));
+
+            animals.get(filePath, (err, cat) => {
+                if(err) return done(err);
+                assert.deepEqual(animal, cat);
+            });
 
             done();
         });
@@ -68,6 +77,7 @@ describe('db', () => {
             done();
         });
     });
+
 });
 
 // TODO: Mark - Anwar - Add a 'saves building' it block similar to 'saves animal'
