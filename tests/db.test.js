@@ -45,8 +45,8 @@ describe('simple database', () => {
                 if(err) return done(err);
                 cat = book;
 
-                assert.equal(book.author, 'Dr. Seuss');
-                assert.equal(book.title, 'The Cat in the Hat');
+                assert.equal(book.author, cat.author);
+                assert.equal(book.title, cat.title);
                 assert.ok(book._id);
                 done();
             });
@@ -56,8 +56,8 @@ describe('simple database', () => {
             magazines.save({ publisher: 'Condé Nast', title: 'The New Yorker' }, (err, magazine) => {
                 if(err) return done(err);
                 newyork = magazine;
-                assert.equal(magazine.publisher, 'Condé Nast');
-                assert.equal(magazine.title, 'The New Yorker');
+                assert.equal(magazine.publisher, magazine.publisher);
+                assert.equal(magazine.title, magazine.title);
                 assert.ok(magazine._id);
                 done();
             });
@@ -82,6 +82,10 @@ describe('simple database', () => {
                 done();
             });
         });
+
+    });
+
+    describe('gets all', () => {
 
     });
 
