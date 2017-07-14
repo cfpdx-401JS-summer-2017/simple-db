@@ -106,13 +106,12 @@ describe('simple database', () => {
     describe('gets all', () => {
         
         it('books and returns array', done => {
-            // QUESTION: should I add more books?
-
+            // add book
             books.save({ author: 'E. B. White', title: 'Charlotte\'s Web' }, (err, book1) => {
                 if(err) return done(err);
                 web = book1;
             });
-
+            // add book
             books.save({ author: 'Roald Dahl', title: 'Charlie and the Chocolate Factory' }, (err, book2) => {
                 if(err) return done(err);
                 charlie = book2;
@@ -120,14 +119,16 @@ describe('simple database', () => {
 
             books.getAll((err, objects) => {
                 if(err) return done(err);
-                
-                assert.equal(objects.length, 3);
+                assert.deepEqual(objects.length, [cat, web, charlie]);
                 done();
             });
         });
 
+        // it('books and returns empty array')
         // it('gets all magazines')
 
     });
+
+    
 
 });
