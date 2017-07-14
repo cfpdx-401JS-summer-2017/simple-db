@@ -71,5 +71,13 @@ describe('db', () => {
         });
     });
 
+    it('returns null if no id does not exist', done => {
+        animals.get('hey mom', (err, animal) => {
+            if (err) return done(err);
+            assert.equal(animal, null);
+            done();
+        });
+    });
+
 });
 
