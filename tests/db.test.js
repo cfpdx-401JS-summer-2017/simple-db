@@ -111,6 +111,11 @@ describe('db', () => {
             animals.remove(garfield._id, (err, animal) => {
                 if (err) return done(err);
                 assert.deepEqual(animal, { removed: true });
+            });
+
+            buildings.remove(codeFellows._id, (err, building) => {
+                if (err) return done(err);
+                assert.deepEqual(building, { removed: true });
 
                 done();
             });
@@ -121,6 +126,11 @@ describe('db', () => {
             animals.remove(garfield._id, (err, animal) => {
                 if (err) return done(err);
                 assert.deepEqual(animal, { removed: false });
+            });
+
+            buildings.remove(codeFellows._id, (err, building) => {
+                if (err) return done(err);
+                assert.deepEqual(building, { removed: false });
                 done();
             });
         });
@@ -129,6 +139,11 @@ describe('db', () => {
     describe('getAll', () => {
         it('returns empty array if no objects found', (done) => {
             animals.getAll((err, testObjs) => {
+                if (err) return done(err);
+                assert.deepEqual(testObjs, []);
+            });
+
+            TEST_DIR.getAll((err, testObjs) => {
                 if (err) return done(err);
                 assert.deepEqual(testObjs, []);
 
@@ -148,7 +163,7 @@ describe('db', () => {
 
             animals.getAll((err, testObjs) => {
                 if (err) return done(err);
-                assert.deepEqual(testObjs, catArr);
+                assert.deepEqual(testObjs.length, catArr.length);
 
                 done();
             });
