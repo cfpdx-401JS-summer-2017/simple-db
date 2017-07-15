@@ -143,7 +143,7 @@ describe('db', () => {
                 assert.deepEqual(testObjs, []);
             });
 
-            TEST_DIR.getAll((err, testObjs) => {
+            buildings.getAll((err, testObjs) => {
                 if (err) return done(err);
                 assert.deepEqual(testObjs, []);
 
@@ -151,23 +151,33 @@ describe('db', () => {
             });
         });
 
-        it('returns array of all objects', (done) => {
+        it('returns array of all animals', (done) => {
             let catArr = [{ type: 'cat', name: 'garfield'},  {type: 'cat', name: 'felix'}, { type: 'cat', name: 'minerva'}];
+            function saveCats (callback) {
+                let counter = catArr.length;
+                catArr.forEach((catObj) => {
+                    animals.save(catObj, (err, animal) => {
+                        if (err) return done(err);
+                        catObj._id = animal._id;
+                        counter--;
+                        if (counter ===0) callback(null);
 
-            catArr.forEach((catObj) => {
-                animals.save(catObj, (err, animal) => {
-                    if (err) return done(err);
-                    catObj._id = animal._id;
+                    });
                 });
+
+            }
+            saveCats(err => {
+                animals.getAll((err, testObjs) => {
+                    if (err) return done(err);
+                    assert.deepEqual(testObjs.length, catArr.length);
+            
+                    done();
+                });
+
             });
 
-            animals.getAll((err, testObjs) => {
-                if (err) return done(err);
-                assert.deepEqual(testObjs.length, catArr.length);
-
-                done();
-            });
         });
+        
     });
 
 });
