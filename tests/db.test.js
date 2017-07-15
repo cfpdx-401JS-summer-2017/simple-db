@@ -25,6 +25,9 @@ describe('db', () => {
     // the "it" tests...
     let animals = null;
     let garfield = null;
+    let felix = null;
+    let minerva = null;
+
     // 2. create an animal store ("table")
     // (you can use whatever domain "thing" you want)
     before(done => {
@@ -103,12 +106,30 @@ describe('db', () => {
             });
         });
     });
-    
+
     describe('getAll', () => {
         it('returns empty array if no objects found', (done) => {
             animals.getAll((err, testObjs) => {
                 if (err) return done(err);
                 assert.deepEqual(testObjs, []);
+
+                done();
+            });
+        });
+
+        it('returns array of all objects', (done) => {
+            let catArr = [{ type: 'cat', name: 'garfield'},  {type: 'cat', name: 'felix'}, { type: 'cat', name: 'minerva'}];
+
+            catArr.forEach((catObj) => {
+                animals.save(catObj, (err, animal) => {
+                    if (err) return done(err);
+                    catObj._id = animal._id;
+                });
+            });
+
+            animals.getAll((err, testObjs) => {
+                if (err) return done(err);
+                assert.deepEqual(testObjs, catArr);
 
                 done();
             });
