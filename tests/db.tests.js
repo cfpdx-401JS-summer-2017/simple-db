@@ -62,10 +62,18 @@ describe('db', () => {
             const id = animal._id;
 
             animals.get(id, (err, dog) => {
-                if(err) return done(err);
+                if (err) return done(err);
                 assert.deepEqual(animal, dog);
                 done();
             });
+        });
+    });
+
+    it('gets all animals', done => {
+        animals.getAll((err, results) => {
+            if (err) return done(err);
+            assert.equal(results.length, 2);
+            done();
         });
     });
 
@@ -80,7 +88,7 @@ describe('db', () => {
             assert.ok(fs.readFileSync(filePath));
 
             animals.remove(id, (err, callback) => {
-                if(err) return done(err);
+                if (err) return done(err);
                 assert.equal(callback.removed, true);
                 done();
             });
@@ -88,7 +96,7 @@ describe('db', () => {
     });
 
     it('saves buildings', done => {
-        buildings.save({ type: 'pretty', name: 'Falling Water'}, (err, building) => {
+        buildings.save({ type: 'pretty', name: 'Falling Water' }, (err, building) => {
             if (err) return done(err);
             assert.equal(building.type, 'pretty');
             assert.equal(building.name, 'Falling Water');
@@ -105,9 +113,5 @@ describe('db', () => {
 
             done();
         });
-        
     });
-
 });
-
-// TODO: Mark - Anwar - Add a 'saves building' it block similar to 'saves animal'
