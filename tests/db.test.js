@@ -25,8 +25,7 @@ describe('db', () => {
     // the "it" tests...
     let animals = null;
     let garfield = null;
-    let felix = null;
-    let minerva = null;
+    let codeFellows = null;
 
     // 2. create an animal store ("table")
     // (you can use whatever domain "thing" you want)
@@ -52,7 +51,7 @@ describe('db', () => {
 
     // 3. use the store in tests
     describe('save', () => {
-        it('saves animal and gives it and ID', done => {
+        it('saves object and gives it and ID', done => {
             // call save
             animals.save({ type: 'cat', name: 'garfield'}, (err, animal) => {
                 if(err) return done(err);
@@ -61,6 +60,16 @@ describe('db', () => {
                 assert.equal(animal.type, 'cat');
                 assert.equal(animal.name, 'garfield');
                 assert.ok(animal._id);
+                // moar tests...
+            });
+
+            buildings.save({ type: 'school', name: 'codeFellows'}, (err, building) => {
+                if(err) return done(err);
+                // test has, id, props match, etc, etc, 
+                codeFellows = building;
+                assert.equal(building.type, 'school');
+                assert.equal(building.name, 'codeFellows');
+                assert.ok(building._id);
                 // moar tests...
                 done();
             });
@@ -72,15 +81,25 @@ describe('db', () => {
             animals.get(garfield._id, (err, animal) => {
                 if (err) return done(err);
                 assert.equal(animal._id, garfield._id);
+            });
+
+            buildings.get(codeFellows._id, (err, building) => {
+                if (err) return done(err);
+                assert.equal(building._id, codeFellows._id);
 
                 done();
             });
-
         });
+
         it('return null if that id does not exist', (done)  => {
             animals.get(3, (err, animal) => {
                 if (err) return done(err);
                 assert.equal(animal, null);
+            });
+
+            buildings.get(3, (err, building) => {
+                if (err) return done(err);
+                assert.equal(building, null);
 
                 done();
             });
