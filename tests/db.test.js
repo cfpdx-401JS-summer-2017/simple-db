@@ -166,7 +166,7 @@ describe('db', () => {
                 });
 
             }
-            saveCats(err => {
+            saveCats(err => {  //eslint-disable-line
                 animals.getAll((err, testObjs) => {
                     if (err) return done(err);
                     assert.deepEqual(testObjs.length, catArr.length);
