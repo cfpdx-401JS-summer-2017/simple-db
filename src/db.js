@@ -1,4 +1,5 @@
-/* .save(<objectToSave>, callback)
+/*
+.save(<objectToSave>, callback)
 creates a _id property for the object
 saves the object in a file, where the filename is the _id. e.g. if the id is 12345, the file will be 12345.json
 returns objectToSave with added _id property

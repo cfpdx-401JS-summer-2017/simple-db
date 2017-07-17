@@ -1,7 +1,7 @@
 const db = require('./db')
-const shortid = require('shortid')
 const path = require('path')
 db.rootDir = path.join(__dirname, '../data')
+console.log(db.rootDir);
 
 const animals = db.createTable('animals')
 const buildings = db.createTable('buildings')
@@ -9,11 +9,11 @@ const buildings = db.createTable('buildings')
 animals.save({ name: 'garfield' }, (err, cat) => {
   if (err) return console.log('ERROR', err)
   const id = cat._id
+})
 
-  animals.get(id, (err, cat) => {
-    if (err) return console.log('ERROR', err)
-    console.log('got cat', cat)
-  })
+animals.get(id, (err, cat) => {
+  if (err) return console.log('ERROR', err)
+  console.log('got cat', cat)
 })
 
 animals.getAll((err, animals) => {
