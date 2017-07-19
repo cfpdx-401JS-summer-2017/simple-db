@@ -4,3 +4,5 @@ example*
 sandbox.*
 tests/test-data/
 info-*
+.vscode
+.vscode/cSpell.json

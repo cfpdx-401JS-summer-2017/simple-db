@@ -1,31 +1,24 @@
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf');
+const promisify = require('util').promisify;
+const rimraf = promisify(require('rimraf'));
 const db = require('../lib/db'); // root directory
 
 describe('simple database', () => {
     // set the root directory for test
     const TEST_DIR = path.join(__dirname, 'test-data');
 
-    before(done => {
-        rimraf(TEST_DIR, err => {
-            if(err) done(err);
-            else done();
-        });
-    });
+    before(() => rimraf(TEST_DIR));
     
     let books = null;
     let cat = null;
     let web = null;
     let charlie = null;
 
-    before(done => {
+    before(() => {
         db.rootDir = TEST_DIR;
-        db.createTable('books', (err, db) => {
-            if(err) return done(err);
-            books = db;
-            done();
-        });
+        return db.createTable('books')
+            .then(db => books = db);
     });
 
     let magazines = null;
@@ -33,27 +26,22 @@ describe('simple database', () => {
     let natgeo = null;
     let time = null;
 
-    before(done => {
+    before(() => {
         db.rootDir = TEST_DIR;
-        db.createTable('magazines', (err, db) => {
-            if(err) return done(err);
-            magazines = db;
-            done();
-        });
+        db.createTable('magazines')
+            .then(db => magazines = db);
     });
 
     describe('saves', () => {
 
-        it('new book with JSON content', done => {
-            books.save({ author: 'Dr. Seuss', title: 'The Cat in the Hat' }, (err, book) => {
-                if(err) return done(err);
-                cat = book;
-
-                assert.equal(book.author, cat.author);
-                assert.equal(book.title, cat.title);
-                assert.ok(book._id);
-                done();
-            });
+        it.only('new book with JSON content', () => {
+            books.save({ author: 'Dr. Seuss', title: 'The Cat in the Hat' })
+                .then(book => {
+                    cat = book;
+                    assert.equal(book.author, cat.author);
+                    assert.equal(book.title, cat.title);
+                    assert.ok(book._id);
+                });
         });
 
         it('new magazine with JSON content', done => {
