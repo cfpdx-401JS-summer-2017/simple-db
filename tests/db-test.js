@@ -1,41 +1,35 @@
-const rimraf = require('rimraf');
+const promisify = require('util').promisify;
+const rimraf = promisify(require('rimraf'));
 const assert = require('assert');
 const path = require('path');
 const db = require('../lib/db');
 
+
+
 describe('db', () => {
     const TEST_DIR = path.join(__dirname, 'test');
 
-    before(done => {
-        rimraf(TEST_DIR, err => {
-            if (err) return done(err);
-            else done();
-        });
-    });
+    before(() => rimraf(TEST_DIR));
 
     let alcohol = null;
     let ipa = null;
     let drinks = [];
 
-    before(done => {
+    before(() => {
         db.rootDir = TEST_DIR;
-        db.createTable('alcohol', (err, store) => {
-            if (err) return done(err);
-            alcohol = store;
-            done();
-        });
+        return db.createTable('alcohol')
+            .then(store => { alcohol = store; });
     });
 
-    it('saves alcohol to the db', done => {
-        alcohol.save({ type: 'beer', name: 'IPA' }, (err, savedBeer) => {
-            if (err) return done(err);
-            ipa = savedBeer;
-            drinks.push(ipa);
-            assert.equal(savedBeer.type, 'beer');
-            assert.equal(savedBeer.name, 'IPA');
-            assert.ok(savedBeer._id);
-            done();
-        });
+    it.only('saves alcohol to the db', () => {
+        return alcohol.save({ type: 'beer', name: 'IPA' })
+            .then(savedBeer => {
+                ipa = savedBeer;
+                drinks.push(ipa);
+                assert.equal(savedBeer.type, 'beer');
+                assert.equal(savedBeer.name, 'IPA');
+                assert.ok(savedBeer._id);
+            });
     });
 
     it('gets alcohol by id', done => {
@@ -48,8 +42,8 @@ describe('db', () => {
     });
 
     it('returns all of the alcohol objects', (done) => {
-        alcohol.save({type: 'hardA', name: 'gin'}, (err, saved) => {
-            if(err) return done(err);
+        alcohol.save({ type: 'hardA', name: 'gin' }, (err, saved) => {
+            if (err) return done(err);
             drinks.push(saved);
         });
         alcohol.getAll((err, alcoholArray) => {
@@ -64,8 +58,8 @@ describe('db', () => {
 
     it('removes alcohol by id', done => {
         alcohol.remove(ipa._id, (err, data) => {
-            if (err) return done (err);
-            assert.deepEqual(data, {removed: true});
+            if (err) return done(err);
+            assert.deepEqual(data, { removed: true });
             done();
         });
     });
