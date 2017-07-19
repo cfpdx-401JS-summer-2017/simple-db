@@ -1,38 +1,29 @@
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf');
+const promisify = require('util').promisify;
+const rimraf = promisify(require('rimraf'));
 const db = require('../lib/db');
 
 describe('db', () => {
 
     const TEST_DIR = path.join(__dirname, 'test');
 
-    before(done => {
-        rimraf(TEST_DIR, err => {
-            if(err) done(err);
-            else done();
-        });
-    });
+    before( () => rimraf(TEST_DIR));
 
     let animals = null;
 
-    before(done => {
+    before( () => {
         db.rootDir = TEST_DIR;
-        db.createTable('animals', (err, store) => {
-            if(err) return done(err);
-            animals = store;
-            done();
-        });
+        return db.createTable('animals')
+            .then( store => animals = store );
     }); 
 
     let buildings = null;
-    before(done => {
+
+    before( () => {
         db.rootDir = TEST_DIR;
-        db.createTable('buildings', (err, store) => {
-            if(err) return done(err);
-            buildings = store;
-            done();
-        });
+        return db.createTable('buildings')
+            .then( store => buildings = store );
     });
 
     let jinx = { type: 'cat', name: 'jinx' };
@@ -45,7 +36,7 @@ describe('db', () => {
     let savedFelix = null;
     let savedOtis = null;
 
-    it('saves animal', done => {
+    it.only('saves animal', done => {
         animals.save(jinx, (err, animal) => {
             if(err) return done(err);
             savedAnimal = animal;
