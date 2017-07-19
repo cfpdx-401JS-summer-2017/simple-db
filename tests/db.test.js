@@ -97,15 +97,27 @@ describe('db', () => {
         });
     });
 
-    it('returns an array of all objects from the requested table', done => {
-        animals.save(garfield);
-        animals.save(felix);
-        animals.save(otis);
+    it('returns an empty array if there is nothing in the directory', done => {
         animals.getAll((err, allGot)=>{
             if(err) return done(err);
-            assert.deepEqual(allGot, [{type: 'cat', name: 'garfield'}, {type: 'cat', name: 'felix'}, {type: 'cat', name: 'otis'}]);
+            assert.deepEqual(allGot, []);
             done();
         });
     });
+
+    it('returns an array of all objects from the requested table', done => {
+        const savedGarfield = animals.save(garfield, () =>{});
+        const savedFelix = animals.save(felix, () =>{});
+        const savedOtis = animals.save(otis, () =>{});
+        animals.getAll((err, allGot)=>{
+            if(err) return done(err);
+            assert.equal(allGot.length, 3);
+            assert.ok(allGot.find(obj => obj._id === savedGarfield._id));
+            assert.ok(allGot.find(obj => obj._id === savedOtis._id));
+            assert.ok(allGot.find(obj => obj._id === savedFelix._id));
+            done();
+        });
+    });
+
 });
 
