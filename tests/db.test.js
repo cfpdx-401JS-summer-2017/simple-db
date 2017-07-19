@@ -56,12 +56,9 @@ describe('db', () => {
             .then (animal => assert.equal(animal, null));
     });
 
-    it('removes an object from the db as specified from a supplied id', done => {
-        animals.remove(savedAnimal._id, (err, response) => {
-            if(err) return done(err);
-            assert.deepEqual(response, { removed: true });
-            done();
-        });
+    it.only('removes an object from the db as specified from a supplied id', () => {
+        return animals.remove(savedAnimal._id)
+            .then (response => assert.deepEqual(response, { removed: true }));
     });
 
     it('returns {removed: false} if remove does not occur', done => {
