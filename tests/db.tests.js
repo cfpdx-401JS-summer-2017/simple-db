@@ -1,6 +1,7 @@
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf');
+const promisify = require('util').promisify;
+const rimraf = promisify(require('rimraf'));
 const db = require('../lib/db');
 const fs = require('fs');
 
@@ -8,50 +9,42 @@ describe('db', () => {
 
     const TEST_DIR = path.join(__dirname, 'test');
 
-    before(done => {
-        rimraf(TEST_DIR, err => {
-            if (err) done(err);
-            else done();
-        });
-    });
+    before(() => rimraf(TEST_DIR));
 
     let animals = null;
 
-    before(done => {
+    before(() => {
         db.rootDir = TEST_DIR;
-        db.createTable('animals', (err, store) => {
-            if (err) return done(err);
-            animals = store;
-            done();
-        });
+        return db.createTable('animals')
+            .then(store => {
+                animals = store;
+            });
     });
 
-    let buildings = null;
+    // let buildings = null;
 
-    before(done => {
-        db.rootDir = TEST_DIR;
-        db.createTable('buildings', (err, store) => {
-            if (err) return done(err);
-            buildings = store;
-            done();
-        });
-    });
+    // before(done => {
+    //     db.rootDir = TEST_DIR;
+    //     db.createTable('buildings', (err, store) => {
+    //         if (err) return done(err);
+    //         buildings = store;
+    //         done();
+    //     });
+    // });
 
-    it('saves animal', done => {
-        animals.save({ type: 'cat', name: 'garfield' }, (err, animal) => {
+    it.only('saves animal', () => {
+        return animals.save({ type: 'cat', name: 'garfield' })
+            .then (animal => {
 
-            if (err) return done(err);
+                const id = animal._id;
+                const filePath = path.join(TEST_DIR, 'animals/' + animal._id + '.json');
 
-            const id = animal._id;
-            const filePath = path.join(TEST_DIR, 'animals/' + animal._id + '.json');
+                assert.equal(animal.type, 'cat');
+                assert.equal(animal.name, 'garfield');
+                assert.ok(id);
+                assert.ok(fs.readFileSync(filePath));
 
-            assert.equal(animal.type, 'cat');
-            assert.equal(animal.name, 'garfield');
-            assert.ok(id);
-            assert.ok(fs.readFileSync(filePath));
-            done();
-
-        });
+            });
     });
 
     it('gets animal', done => {
