@@ -36,15 +36,14 @@ describe('db', () => {
     let savedFelix = null;
     let savedOtis = null;
 
-    it.only('saves animal', done => {
-        animals.save(jinx, (err, animal) => {
-            if(err) return done(err);
-            savedAnimal = animal;
-            assert.equal(animal.type, 'cat');
-            assert.equal(animal.name, 'jinx');
-            assert.ok(animal._id);
-            done();
-        });
+    it.only('saves animal', () => {
+        return animals.save(jinx)
+            .then( animal => {
+                savedAnimal = animal;
+                assert.equal(animal.type, 'cat');
+                assert.equal(animal.name, 'jinx');
+                assert.ok(animal._id);
+            });
     });
     
     it('gets a saved object by id', done => {
