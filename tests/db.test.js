@@ -46,12 +46,9 @@ describe('db', () => {
             });
     });
     
-    it('gets a saved object by id', done => {
-        animals.get(savedAnimal._id, (err, animal) => {
-            if (err) return done(err);
-            assert.deepEqual(animal, savedAnimal);
-            done();
-        });
+    it.only('gets a saved object by id', () => {
+        return animals.get(savedAnimal._id)
+            .then (animal => assert.deepEqual(animal, savedAnimal));
     });
 
     it('returns null if id does not exist', done => {
