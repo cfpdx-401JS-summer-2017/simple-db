@@ -90,75 +90,58 @@ describe('db', () => {
         });
     });
 
-    // it('saves building', done => {
-    //     buildings.save(jinx, (err, building) => {
-    //         if(err) return done(err);
-    //         savedBuilding = building;
-    //         assert.equal(building.type, 'cat');
-    //         assert.equal(building.name, 'jinx');
-    //         assert.ok(building._id);
-    //         done();
-    //     });
-    // });
+    it('saves building', () => {
+        return buildings.save(jinx)
+            .then( building => {
+                savedBuilding = building;
+                assert.equal(building.type, 'cat');
+                assert.equal(building.name, 'jinx');
+                assert.ok(building._id);
+            });
+    });
     
-    // it('gets a saved object by id', done => {
-    //     buildings.get(savedBuilding._id, (err, building) => {
-    //         if (err) return done(err);
-    //         assert.deepEqual(building, savedBuilding);
-    //         done();
-    //     });
-    // });
+    it('gets a saved object by id', () => {
+        return buildings.get(savedBuilding._id)
+            .then (building => assert.deepEqual(building, savedBuilding));
+    });
 
-    // it('returns null if id does not exist', done => {
-    //     buildings.get('hey mom', (err, building) => {
-    //         if (err) return done(err);
-    //         assert.equal(building, null);
-    //         done();
-    //     });
-    // });
+    it('returns null if id does not exist', () => {
+        return buildings.get('hey mom')
+            .then (building => assert.equal(building, null));
+    });
 
-    // it('removes an object from the db as specified from a supplied id', done => {
-    //     buildings.remove(savedBuilding._id, (err, response) => {
-    //         if(err) return done(err);
-    //         assert.deepEqual(response, { removed: true });
-    //         done();
-    //     });
-    // });
+    it('removes an object from the db as specified from a supplied id', () => {
+        return buildings.remove(savedBuilding._id)
+            .then (response => assert.deepEqual(response, { removed: true }));
+    });
 
-    // it('returns {removed: false} if remove does not occur', done => {
-    //     buildings.remove('hey mom', (err, response) => {
-    //         if (err) return done(err);
-    //         assert.deepEqual(response, { removed: false });
-    //         done();
-    //     });
-    // });
+    it('returns {removed: false} if remove does not occur', () => {
+        return buildings.remove('hey mom')
+            .then(response => assert.deepEqual(response, { removed: false }));
+    });
 
-    // it('returns an empty array if there is nothing in the directory', done => {
-    //     buildings.getAll((err, allGot)=>{
-    //         if(err) return done(err);
-    //         assert.deepEqual(allGot, []);
-    //         done();
-    //     });
-    // });
-    // describe('getAll', () => {
-    //     before( done => {
-    //         savedGarfield = buildings.save(garfield, () =>{});
-    //         savedFelix = buildings.save(felix, () =>{});
-    //         savedOtis = buildings.save(otis, () =>{});
-    //         done();
-    //     });
+    it('returns an empty array if there is nothing in the directory', () => {
+        return buildings.getAll(allGot => assert.deepEqual(allGot, []));
+    });
 
-    //     it('returns an array of all objects from the requested table', done => {
-    //         buildings.getAll((err, allGot)=>{
-    //             if(err) return done(err);
-    //             assert.equal(allGot.length, 3);
-    //             assert.ok(allGot.find(obj => obj._id === savedGarfield._id));
-    //             assert.ok(allGot.find(obj => obj._id === savedOtis._id));
-    //             assert.ok(allGot.find(obj => obj._id === savedFelix._id));
-    //             done();
-    //         });
-    // });
-    // });
+    describe('getAll', () => {
+        before( () => {
+            return Promise.all([
+                buildings.save(garfield).then(building => savedGarfield = building),
+                buildings.save(felix).then(building => savedFelix = building),
+                buildings.save(otis).then(building => savedOtis = building)
+            ]);
+        });
+
+        it('returns an array of all objects from the requested table', () => {
+            return buildings.getAll()
+                .then(allGot =>{
+                    assert.equal(allGot.length, 3);
+                    assert.ok(allGot.find(obj => obj._id === savedOtis._id));
+                    assert.ok(allGot.find(obj => obj._id === savedGarfield._id));
+                    assert.ok(allGot.find(obj => obj._id === savedFelix._id));
+                });
+        });
+    });
 
 });
-
