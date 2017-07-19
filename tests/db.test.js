@@ -61,12 +61,9 @@ describe('db', () => {
             .then (response => assert.deepEqual(response, { removed: true }));
     });
 
-    it('returns {removed: false} if remove does not occur', done => {
-        animals.remove('hey mom', (err, response) => {
-            if (err) return done(err);
-            assert.deepEqual(response, { removed: false });
-            done();
-        });
+    it.only('returns {removed: false} if remove does not occur', () => {
+        return animals.remove('hey mom')
+            .then(response => assert.deepEqual(response, { removed: false }));
     });
 
     it('returns an empty array if there is nothing in the directory', done => {
