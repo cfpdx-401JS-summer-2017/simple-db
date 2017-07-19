@@ -1,7 +1,10 @@
+// cSpell:ignore promisify
 const assert = require('assert');
 const path = require('path');
-const rimraf = require('rimraf');
+const promisify = require('util').promisify;
+const rimraf = promisify(require('rimraf'));
 const db = require('../lib/db');
+
 
 
 describe('db', () => {
@@ -14,81 +17,70 @@ describe('db', () => {
     const TEST_DIR = path.join(__dirname, 'test');
 
     // 1. delete the test directory
-    before(done => {
-        rimraf(TEST_DIR, err => {
-            if(err) done(err);
-            else done();
-        });
-    });
+    before(() => rimraf(TEST_DIR));
     
     // declare variable out here so we have access in
     // the "it" tests...
     let animals = null;
     let garfield = null;
     let codeFellows = null;
+    let buildings = null;
 
     // 2. create an animal store ("table")
     // (you can use whatever domain "thing" you want)
-    before(done => {
+    before(() => {
         db.rootDir = TEST_DIR;
-        db.createTable('animals', (err, store) => {
-            if(err) return done(err);
-            animals = store;
-            done();
-        });
+        return db.createTable('animals')
+            .then(store => animals = store);
     }); 
 
     // 2. create a buildings store ("table")
-    let buildings = null;
-    before(done => {
+    before(() => {
         db.rootDir = TEST_DIR;
-        db.createTable('buildings', (err, store) => {
-            if(err) return done(err);
-            buildings = store;
-            done();
-        });
+        return db.createTable('buildings')
+            .then(store => buildings = store); 
     });
 
     // 3. use the store in tests
     describe('save', () => {
-        it('saves object and gives it and ID', done => {
+        it.only('saves object and gives it and ID', () => {
             // call save
-            animals.save({ type: 'cat', name: 'garfield'}, (err, animal) => {
-                if(err) return done(err);
-                // test has, id, props match, etc, etc, 
-                garfield = animal;
-                assert.equal(animal.type, 'cat');
-                assert.equal(animal.name, 'garfield');
-                assert.ok(animal._id);
-                // moar tests...
-            });
+            return animals.save({ type: 'cat', name: 'garfield'})
+                .then(animal => {
+                    garfield = animal;
+                    assert.equal(animal.type, 'cat');
+                    assert.equal(animal.name, 'garfield');
+                    assert.ok(animal._id);
+                 
 
-            buildings.save({ type: 'school', name: 'codeFellows'}, (err, building) => {
-                if(err) return done(err);
-                // test has, id, props match, etc, etc, 
-                codeFellows = building;
-                assert.equal(building.type, 'school');
-                assert.equal(building.name, 'codeFellows');
-                assert.ok(building._id);
-                // moar tests...
-                done();
-            });
+                });
+            
+
+            // return buildings.save({ type: 'school', name: 'codeFellows'})
+            // .then(building => {
+            //     codeFellows = building;
+            //     assert.equal(building.type, 'school');
+            //     assert.equal(building.name, 'codeFellows');
+            //     assert.ok(building._id);
+            // });
+                
+           // });
         });
 
     }); 
     describe('get', () => {
-        it('returns the object from the requested table that has that id', (done)  => {
-            animals.get(garfield._id, (err, animal) => {
-                if (err) return done(err);
-                assert.equal(animal._id, garfield._id);
-            });
+        it('returns the object from the requested table that has that id', ()  => {
+            return animals.get(garfield._id)
+                .then(animal => assert.equal(animal._id, garfield._id));
 
-            buildings.get(codeFellows._id, (err, building) => {
-                if (err) return done(err);
-                assert.equal(building._id, codeFellows._id);
+             
 
-                done();
-            });
+            // buildings.get(codeFellows._id, (err, building) => {
+            //     if (err) return done(err);
+            //     assert.equal(building._id, codeFellows._id);
+
+            //     done();
+            // });
         });
 
         it('return null if that id does not exist', (done)  => {
@@ -97,12 +89,12 @@ describe('db', () => {
                 assert.equal(animal, null);
             });
 
-            buildings.get(3, (err, building) => {
-                if (err) return done(err);
-                assert.equal(building, null);
+            // buildings.get(3, (err, building) => {
+            //     if (err) return done(err);
+            //     assert.equal(building, null);
 
-                done();
-            });
+            //     done();
+            // });
         });
     });
 
@@ -113,12 +105,12 @@ describe('db', () => {
                 assert.deepEqual(animal, { removed: true });
             });
 
-            buildings.remove(codeFellows._id, (err, building) => {
-                if (err) return done(err);
-                assert.deepEqual(building, { removed: true });
+            // buildings.remove(codeFellows._id, (err, building) => {
+            //     if (err) return done(err);
+            //     assert.deepEqual(building, { removed: true });
 
-                done();
-            });
+            //     done();
+            // });
 
         });
 
@@ -128,11 +120,11 @@ describe('db', () => {
                 assert.deepEqual(animal, { removed: false });
             });
 
-            buildings.remove(codeFellows._id, (err, building) => {
-                if (err) return done(err);
-                assert.deepEqual(building, { removed: false });
-                done();
-            });
+            // buildings.remove(codeFellows._id, (err, building) => {
+            //     if (err) return done(err);
+            //     assert.deepEqual(building, { removed: false });
+            //     done();
+            // });
         });
     });
 
@@ -143,12 +135,12 @@ describe('db', () => {
                 assert.deepEqual(testObjs, []);
             });
 
-            buildings.getAll((err, testObjs) => {
-                if (err) return done(err);
-                assert.deepEqual(testObjs, []);
+            // buildings.getAll((err, testObjs) => {
+            //     if (err) return done(err);
+            //     assert.deepEqual(testObjs, []);
 
-                done();
-            });
+            //     done();
+            // });
         });
 
         it('returns array of all animals', (done) => {
