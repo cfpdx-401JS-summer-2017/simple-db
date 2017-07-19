@@ -18,7 +18,7 @@ describe('db', () => {
 
     // 1. delete the test directory
     before(() => rimraf(TEST_DIR));
-    
+
     // declare variable out here so we have access in
     // the "it" tests...
     let animals = null;
@@ -32,29 +32,29 @@ describe('db', () => {
         db.rootDir = TEST_DIR;
         return db.createTable('animals')
             .then(store => animals = store);
-    }); 
+    });
 
     // 2. create a buildings store ("table")
     before(() => {
         db.rootDir = TEST_DIR;
         return db.createTable('buildings')
-            .then(store => buildings = store); 
+            .then(store => buildings = store);
     });
 
     // 3. use the store in tests
     describe('save', () => {
         it('saves object and gives it and ID', () => {
             // call save
-            return animals.save({ type: 'cat', name: 'garfield'})
+            return animals.save({ type: 'cat', name: 'garfield' })
                 .then(animal => {
                     garfield = animal;
                     assert.equal(animal.type, 'cat');
                     assert.equal(animal.name, 'garfield');
                     assert.ok(animal._id);
-                 
+
 
                 });
-            
+
 
             // return buildings.save({ type: 'school', name: 'codeFellows'})
             // .then(building => {
@@ -63,17 +63,17 @@ describe('db', () => {
             //     assert.equal(building.name, 'codeFellows');
             //     assert.ok(building._id);
             // });
-                
+
             // });
         });
 
-    }); 
+    });
     describe('get', () => {
-        it('returns the object from the requested table that has that id', ()  => {
+        it('returns the object from the requested table that has that id', () => {
             return animals.get(garfield._id)
                 .then(animal => assert.equal(animal._id, garfield._id));
 
-             
+
 
             // buildings.get(codeFellows._id, (err, building) => {
             //     if (err) return done(err);
@@ -83,10 +83,10 @@ describe('db', () => {
             // });
         });
 
-        it('return null if that id does not exist', ()  => {
+        it('return null if that id does not exist', () => {
             return animals.get(3)
-            .then(animal => assert.equal(animal, null));
-            
+                .then(animal => assert.equal(animal, null));
+
 
             // buildings.get(3, (err, building) => {
             //     if (err) return done(err);
@@ -97,12 +97,10 @@ describe('db', () => {
         });
     });
 
-    describe.skip('remove', () => {
-        it('removes the object and returns removed: true', (done) => {
-            animals.remove(garfield._id, (err, animal) => {
-                if (err) return done(err);
-                assert.deepEqual(animal, { removed: true });
-            });
+    describe('remove', () => {
+        it('removes the object and returns removed: true', () => {
+            return animals.remove(garfield._id)
+                .then(animal => assert.deepEqual(animal, { removed: true }));
 
             // buildings.remove(codeFellows._id, (err, building) => {
             //     if (err) return done(err);
@@ -113,11 +111,9 @@ describe('db', () => {
 
         });
 
-        it('returns removed: false if object does not exist', (done) => {
-            animals.remove(garfield._id, (err, animal) => {
-                if (err) return done(err);
-                assert.deepEqual(animal, { removed: false });
-            });
+        it('returns removed: false if object does not exist', () => {
+            return animals.remove(garfield._id)
+                .then(animal => assert.deepEqual(animal, { removed: false }));
 
             // buildings.remove(codeFellows._id, (err, building) => {
             //     if (err) return done(err);
@@ -143,15 +139,15 @@ describe('db', () => {
         });
 
         it('returns array of all animals', (done) => {
-            let catArr = [{ type: 'cat', name: 'garfield'},  {type: 'cat', name: 'felix'}, { type: 'cat', name: 'minerva'}];
-            function saveCats (callback) {
+            let catArr = [{ type: 'cat', name: 'garfield' }, { type: 'cat', name: 'felix' }, { type: 'cat', name: 'minerva' }];
+            function saveCats(callback) {
                 let counter = catArr.length;
                 catArr.forEach((catObj) => {
                     animals.save(catObj, (err, animal) => {
                         if (err) return done(err);
                         catObj._id = animal._id;
                         counter--;
-                        if (counter ===0) callback(null);
+                        if (counter === 0) callback(null);
 
                     });
                 });
@@ -161,14 +157,14 @@ describe('db', () => {
                 animals.getAll((err, testObjs) => {
                     if (err) return done(err);
                     assert.deepEqual(testObjs.length, catArr.length);
-            
+
                     done();
                 });
 
             });
 
         });
-        
+
     });
 
 });
