@@ -21,20 +21,19 @@ describe('db', () => {
             });
     });
 
-    // let buildings = null;
+    let buildings = null;
 
-    // before(done => {
-    //     db.rootDir = TEST_DIR;
-    //     db.createTable('buildings', (err, store) => {
-    //         if (err) return done(err);
-    //         buildings = store;
-    //         done();
-    //     });
-    // });
+    before(() => {
+        db.rootDir = TEST_DIR;
+        return db.createTable('buildings')
+            .then(store => {
+                buildings = store;
+            });
+    });
 
-    it.only('saves animal', () => {
+    it('saves animal', () => {
         return animals.save({ type: 'cat', name: 'garfield' })
-            .then (animal => {
+            .then(animal => {
 
                 const id = animal._id;
                 const filePath = path.join(TEST_DIR, 'animals/' + animal._id + '.json');
@@ -47,19 +46,21 @@ describe('db', () => {
             });
     });
 
-    it('gets animal', done => {
-        animals.save({ type: 'dog', name: 'snoopy' }, (err, animal) => {
+    it('gets animal', () => {
 
-            if (err) return done(err);
+        let snoopy = null;
+        return animals.save({ type: 'dog', name: 'snoopy' })
+            .then(animal => {
+                snoopy = animal;
+                const id = animal._id;
 
-            const id = animal._id;
+                return animals.get(id);
+            })
+            .then(dog => {
+                
+                assert.deepEqual(snoopy, dog);
 
-            animals.get(id, (err, dog) => {
-                if (err) return done(err);
-                assert.deepEqual(animal, dog);
-                done();
             });
-        });
     });
 
     it('gets all animals', done => {
