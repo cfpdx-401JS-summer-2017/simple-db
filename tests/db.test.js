@@ -51,12 +51,9 @@ describe('db', () => {
             .then (animal => assert.deepEqual(animal, savedAnimal));
     });
 
-    it('returns null if id does not exist', done => {
-        animals.get('hey mom', (err, animal) => {
-            if (err) return done(err);
-            assert.equal(animal, null);
-            done();
-        });
+    it.only('returns null if id does not exist', () => {
+        return animals.get('hey mom')
+            .then (animal => assert.equal(animal, null));
     });
 
     it('removes an object from the db as specified from a supplied id', done => {
