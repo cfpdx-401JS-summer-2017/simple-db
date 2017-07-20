@@ -51,17 +51,16 @@ describe('db', () => {
             })
             .then(() => alcohol.getAll())
             .then((alcoholArray => {
-                assert.deepEqual(alcoholArray,[ipa,gin].sort((a, b)=> (a._id > b._id) ? 1: -1));
+                assert.deepEqual(alcoholArray, [ipa, gin].sort((a, b) => (a._id > b._id) ? 1 : -1));
             }));
-            
+
     });
 
-    xit('removes alcohol by id', done => {
-        alcohol.remove(ipa._id, (err, data) => {
-            if (err) return done(err);
-            assert.deepEqual(data, { removed: true });
-            done();
-        });
+    it('removes alcohol by id', () => {
+        return alcohol.remove(ipa._id)
+            .then(data => {
+                assert.deepEqual(data, { removed: true });
+            });
     });
 
 });
