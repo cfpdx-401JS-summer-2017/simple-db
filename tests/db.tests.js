@@ -70,41 +70,40 @@ describe('db', () => {
             });
     });
 
-    it.skip('removes animal', done => {
-        animals.save({ type: 'bird', name: 'tweety' }, (err, animal) => {
+    it('removes animal', () => {
+        return animals.save({ type: 'bird', name: 'tweety' })
+            .then(animal => {
 
-            if (err) return done(err);
+                const id = animal._id;
+                const filePath = path.join(TEST_DIR, 'animals/' + animal._id + '.json');
 
-            const id = animal._id;
-            const filePath = path.join(TEST_DIR, 'animals/' + animal._id + '.json');
+                assert.ok(fs.readFileSync(filePath));
+                
+                return animals.remove(id);
 
-            assert.ok(fs.readFileSync(filePath));
-
-            animals.remove(id, (err, callback) => {
-                if (err) return done(err);
-                assert.equal(callback.removed, true);
-                done();
+            })
+            .then(obj => {
+                assert.equal(obj.removed, true);
             });
-        });
     });
 
-    it.skip('saves buildings', done => {
-        buildings.save({ type: 'pretty', name: 'Falling Water' }, (err, building) => {
-            if (err) return done(err);
-            assert.equal(building.type, 'pretty');
-            assert.equal(building.name, 'Falling Water');
-            assert.ok(building._id);
-            assert.ok(fs.readFileSync(path.join(TEST_DIR, 'buildings/' + building._id + '.json')));
-        });
-        buildings.save({ type: 'skyscraper', name: 'Chrysler Building' }, (err, building) => {
+    // it.skip('saves buildings', done => {
+    //     buildings.save({ type: 'pretty', name: 'Falling Water' }, (err, building) => {
+    //         if (err) return done(err);
+    //         assert.equal(building.type, 'pretty');
+    //         assert.equal(building.name, 'Falling Water');
+    //         assert.ok(building._id);
+    //         assert.ok(fs.readFileSync(path.join(TEST_DIR, 'buildings/' + building._id + '.json')));
+    //     });
+    //     buildings.save({ type: 'skyscraper', name: 'Chrysler Building' }, (err, building) => {
 
-            if (err) return done(err);
-            assert.equal(building.type, 'skyscraper');
-            assert.equal(building.name, 'Chrysler Building');
-            assert.ok(building._id);
-            assert.ok(fs.readFileSync(path.join(TEST_DIR, 'buildings/' + building._id + '.json')));
+    //         if (err) return done(err);
+    //         assert.equal(building.type, 'skyscraper');
+    //         assert.equal(building.name, 'Chrysler Building');
+    //         assert.ok(building._id);
+    //         assert.ok(fs.readFileSync(path.join(TEST_DIR, 'buildings/' + building._id + '.json')));
 
-            done();
-        });
-    });
+    //         done();
+    //     });
+    // });
 });
