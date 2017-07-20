@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "mkdirp": "^0.5.1",
+    "promisify-node": "^0.4.0",
     "shortid": "^2.2.8"
   }
 }
