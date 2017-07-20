@@ -18,10 +18,13 @@
   },
   "homepage": "https://github.com/tinytort/simple-db#readme",
   "devDependencies": {
+    "chai": "^4.1.0",
+    "chai-http": "^3.0.0",
     "eslint": "^4.2.0",
     "mocha": "^3.4.2"
   },
   "dependencies": {
+    "promisify": "0.0.3",
     "shortid": "^2.2.8"
   }
 }
