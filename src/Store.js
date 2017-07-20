@@ -1,5 +1,24 @@
-const Store = //class
+const fs = require('fs');
+const db = require('../src/db');
+const shortid = require('shortid');
 
+class Store {
+  constructor(obj) {
+    _id = 0;
+    name = 'name';
+    type = 'type';
+  }
+  save({ obj }) {
+    return { name: this.name, _id: this._id, type: this.type };
+  }
+
+  get() {}
+  getAll() {}
+
+  remove() {}
+}
+
+module.exports = Store;
 
 // make this a function that can be exported and returns/ creates an obj
 
@@ -7,22 +26,21 @@ const Store = //class
 
 // creates store object
 
-  save({obj}) {
-    const savedAnimal = {name: this.name, _id: this._id}
+// save({obj}) {
+//   const savedAnimal = {name: this.name, _id: this._id}
 
-  }
+// }
 
-  get (id) {
+// get (id) {
 
-  }
-  getAll () {
+// }
+// getAll () {
 
-  }
+// }
 
-  remove () {
+// remove () {
 
-  }
-
+// }
 
 /*
 .save(<objectToSave>, callback)
