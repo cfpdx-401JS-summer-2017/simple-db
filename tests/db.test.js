@@ -71,23 +71,12 @@ describe('simple database', () => {
                 });
         });
 
-        it.skip('book that does not exist and returns null', () => {
+
+        it('book that does not exist and returns null', () => {
             return books.get('not-a-real-id')
                 .then(book => {
                     assert.equal(book, null);
-                })
-                .catch(err => {
-                    console.log('failure (reject)', err);
-                    // return 'is this the end?';
                 });
-        });
-
-        it.skip('magazine that does not exist and returns null', done => {
-            magazines.get('non-existent-id', (err, magazine) => {
-                if(err) return done(err);
-                assert.equal(magazine, null);
-                done();
-            });
         });
 
     });
@@ -122,20 +111,23 @@ describe('simple database', () => {
 
     });
 
-    describe.skip('removes', () => {
+    describe('removes', () => {
 
-        it('book by id', done => {
-            books.remove(cat._id, (err, status) => {
-                assert.deepEqual(status, { removed: true });
-                done();
-            });
+        it('book by id', () => {
+            let book = { author: 'William Shakespeare', title: 'Hamlet' };
+            
+            return books.save(book)
+                .then(book => books.remove(book._id))
+                .then(status => {
+                    assert.deepEqual(status, ({ removed: true }));
+                });
         });
 
-        it('magazine by id returns false', done => {
-            magazines.remove('id-dont-exist', (err, status) => {
-                assert.deepEqual(status, { removed: false });
-                done();
-            });
+        it('magazine by id returns false', () => {
+            return magazines.remove('id-dont-exist')
+                .then(status => {
+                    assert.deepEqual(status, ({ removed: false }));
+                });
         });
 
     });
