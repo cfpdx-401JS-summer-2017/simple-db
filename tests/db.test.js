@@ -110,23 +110,16 @@ describe('simple database', () => {
 
         // it('books and returns empty array')
         
-        it.skip('magazines and returns array', done => {
-            let Magazine
-            magazines.save({ publisher: 'National Geographic Society', title: 'National Geographic' }, (err, mag1) => {
-                if(err) return done(err);
-                natgeo = mag1;
-            });
-            // add magazine
-            magazines.save({ publisher: 'Time Inc.', title: 'Time' }, (err, mag2) => {
-                if(err) return done(err);
-                charlie = mag2;
-            });
+        it('magazines and returns array', () => {
+            let mag1 = { publisher: 'National Geographic Society', title: 'National Geographic' };
+            let mag2 = { publisher: 'Time Inc.', title: 'Time' };
+            magazines.save(mag1);
+            magazines.save(mag2);
 
-            magazines.getAll((err, files) => {
-                if(err) return done(err);
-                assert.equal(files.length, 3);
-                done();
-            });
+            return (magazines.getAll())
+                .then(files => {
+                    assert.equal(files.length, 2);
+                });
         });
 
     });
