@@ -123,12 +123,10 @@ describe('db', () => {
         });
     });
 
-    describe.skip('getAll', () => {
-        it('returns empty array if no objects found', (done) => {
-            animals.getAll((err, testObjs) => {
-                if (err) return done(err);
-                assert.deepEqual(testObjs, []);
-            });
+    describe('getAll', () => {
+        it('returns empty array if no objects found', () => {
+            return animals.getAll()
+                .then(testObjs => assert.deepEqual(testObjs, []));
 
             // buildings.getAll((err, testObjs) => {
             //     if (err) return done(err);
@@ -138,33 +136,37 @@ describe('db', () => {
             // });
         });
 
-        it('returns array of all animals', (done) => {
-            let catArr = [{ type: 'cat', name: 'garfield' }, { type: 'cat', name: 'felix' }, { type: 'cat', name: 'minerva' }];
-            function saveCats(callback) {
-                let counter = catArr.length;
-                catArr.forEach((catObj) => {
-                    animals.save(catObj, (err, animal) => {
-                        if (err) return done(err);
-                        catObj._id = animal._id;
-                        counter--;
-                        if (counter === 0) callback(null);
+        let catArr = [
+            { type: 'cat', name: 'garfield' }, 
+            { type: 'cat', name: 'felix' }, 
+            { type: 'cat', name: 'minerva' }
+        ];
 
-                    });
-                });
+        function saveCats() {
+            return Promise.all(
+                catArr.map(cat => {
+                    animals.save(cat)
+                        .then(animal => {
+                            cat._id = animal._id;
+                            return cat;
+                        });
+                })
+            );
+        }
 
-            }
-            saveCats(err => {  //eslint-disable-line
-                animals.getAll((err, testObjs) => {
-                    if (err) return done(err);
-                    assert.deepEqual(testObjs.length, catArr.length);
+        it('returns array of all animals', () => {
+            // saveCats(err => {  //eslint-disable-line
+            //     animals.getAll((err, testObjs) => {
+            //         if (err) return done(err);
+            //         assert.deepEqual(testObjs.length, catArr.length);
 
-                    done();
-                });
+            //         done();
+            //     });
 
-            });
-
+            // });
+            return saveCats()
+                .then(() => animals.getAll())
+                .then(testObjs => assert.deepEqual(testObjs.length, catArr.length));
         });
-
     });
-
 });
