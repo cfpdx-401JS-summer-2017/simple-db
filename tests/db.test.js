@@ -7,26 +7,18 @@ const db = require('../lib/db'); // root directory
 describe('simple database', () => {
     // set the root directory for test
     const TEST_DIR = path.join(__dirname, 'test-data');
-
-    before(() => rimraf(TEST_DIR));
-    
     let books = null;
-    // let cat = null;
-    // let web = null;
-    // let charlie = null;
+    let magazines = null;
 
-    before(() => {
+    beforeEach(() => rimraf(TEST_DIR));
+
+    beforeEach(() => {
         db.rootDir = TEST_DIR;
         return db.createTable('books')
             .then(db => books = db);
     });
 
-    let magazines = null;
-    // let newyork = null;
-    // let natgeo = null;
-    // let time = null;
-
-    before(() => {
+    beforeEach(() => {
         db.rootDir = TEST_DIR;
         db.createTable('magazines')
             .then(db => magazines = db);
@@ -43,7 +35,6 @@ describe('simple database', () => {
                     assert.ok(book._id);
                     // QUESTION: add readFile assert?
                 });
-                // .catch(err => console.log(err));
         });
 
         it('new magazine with JSON content', () => {
@@ -54,7 +45,6 @@ describe('simple database', () => {
                     assert.equal(magazine.title, newMagazine.title);
                     assert.ok(magazine._id);
                 });
-                // .catch(err => console.log(err));
         });
 
     });
@@ -102,32 +92,26 @@ describe('simple database', () => {
 
     });
 
-    describe.skip('gets all', () => {
+    describe('gets all', () => {
         
-        it('books and returns array', done => {
-            // add book
-            books.save({ author: 'E. B. White', title: 'Charlotte\'s Web' }, (err, book1) => {
-                if(err) return done(err);
-                web = book1;
-            });
-            // add book
-            books.save({ author: 'Roald Dahl', title: 'Charlie and the Chocolate Factory' }, (err, book2) => {
-                if(err) return done(err);
-                charlie = book2;
-            });
-
-            books.getAll((err, files) => {
-                if(err) return done(err);
-                // assert.deepEqual(files, [web, cat, charlie]); // doesn't work
-                assert.equal(files.length, 3);
-                done();
-            });
+        it('books and returns array', () => {
+            let book1 = { author: 'Roald Dahl', title: 'Charlie and the Chocolate Factory' };
+            let book2 = { author: 'C. S. Lewis', title: 'The Lion, the Witch and the Wardrobe' };
+            
+            //QUESTION: how can I chain the saves?
+            books.save(book1);
+            books.save(book2);
+            return (books.getAll())
+                .then(files => {
+                    //QUESTION: how can I test the array?
+                    assert.equal(files.length, 2);
+                });
         });
 
         // it('books and returns empty array')
         
-        it('magazines and returns array', done => {
-            // add magazine
+        it.skip('magazines and returns array', done => {
+            let Magazine
             magazines.save({ publisher: 'National Geographic Society', title: 'National Geographic' }, (err, mag1) => {
                 if(err) return done(err);
                 natgeo = mag1;
