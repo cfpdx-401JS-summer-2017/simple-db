@@ -98,14 +98,13 @@ describe('simple database', () => {
             let book1 = { author: 'Roald Dahl', title: 'Charlie and the Chocolate Factory' };
             let book2 = { author: 'C. S. Lewis', title: 'The Lion, the Witch and the Wardrobe' };
             
-            //QUESTION: how can I chain the saves?
-            books.save(book1);
-            books.save(book2);
-            return (books.getAll())
-                .then(files => {
+            //QUESTION: correct way to chain?
+            return books.save(book1)
+                .then(books.save(book2))
+                .then(books.getAll(files => {
                     //QUESTION: how can I test the array?
                     assert.equal(files.length, 2);
-                });
+                }));
         });
 
         // it('books and returns empty array')
@@ -113,13 +112,12 @@ describe('simple database', () => {
         it('magazines and returns array', () => {
             let mag1 = { publisher: 'National Geographic Society', title: 'National Geographic' };
             let mag2 = { publisher: 'Time Inc.', title: 'Time' };
-            magazines.save(mag1);
-            magazines.save(mag2);
-
-            return (magazines.getAll())
-                .then(files => {
+            
+            return magazines.save(mag1)
+                .then(magazines.save(mag2))
+                .then(magazines.getAll(files => {
                     assert.equal(files.length, 2);
-                });
+                }));
         });
 
     });
