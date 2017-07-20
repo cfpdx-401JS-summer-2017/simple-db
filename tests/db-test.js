@@ -1,8 +1,11 @@
 const promisify = require('util').promisify;
 const rimraf = promisify(require('rimraf'));
-const assert = require('assert');
 const path = require('path');
 const db = require('../lib/db');
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+chai.use(chaiHttp);
+const assert = chai.assert;
 
 
 
@@ -21,7 +24,7 @@ describe('db', () => {
             .then(store => { alcohol = store; });
     });
 
-    it.only('saves alcohol to the db', () => {
+    it('saves alcohol to the db', () => {
         return alcohol.save({ type: 'beer', name: 'IPA' })
             .then(savedBeer => {
                 ipa = savedBeer;
@@ -32,31 +35,28 @@ describe('db', () => {
             });
     });
 
-    it('gets alcohol by id', done => {
-        alcohol.get(ipa._id, (err, beer) => {
-            if (err) return done(err);
-            assert.equal(beer._id, ipa._id);
-            done();
-        });
+    it('gets alcohol by id', () => {
+        return alcohol.get(ipa._id)
+            .then(beer => {
+                assert.equal(beer._id, ipa._id);
+            });
 
     });
 
-    it('returns all of the alcohol objects', (done) => {
-        alcohol.save({ type: 'hardA', name: 'gin' }, (err, saved) => {
-            if (err) return done(err);
-            drinks.push(saved);
-        });
-        alcohol.getAll((err, alcoholArray) => {
-            if (err) return done(err);
-            assert.deepEqual(alcoholArray, drinks);
-            done();
-
-        });
-
-
+    it('returns all of the alcohol objects', () => {
+        const gin = { type: 'hardA', name: 'gin' };
+        return alcohol.save(gin)
+            .then(saved => {
+                drinks.push(saved);
+            })
+            .then(() => alcohol.getAll())
+            .then((alcoholArray => {
+                assert.deepEqual(alcoholArray,[ipa,gin].sort((a, b)=> (a._id > b._id) ? 1: -1));
+            }));
+            
     });
 
-    it('removes alcohol by id', done => {
+    xit('removes alcohol by id', done => {
         alcohol.remove(ipa._id, (err, data) => {
             if (err) return done(err);
             assert.deepEqual(data, { removed: true });
@@ -65,4 +65,3 @@ describe('db', () => {
     });
 
 });
-
