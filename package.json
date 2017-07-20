@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/Thomson42/simple-db#readme",
   "dependencies": {
-    "mkdirp": "^0.5.1"
+    "mkdirp": "^0.5.1",
+    "promisify-node": "^0.4.0"
   },
   "devDependencies": {
     "eslint": "^4.2.0",
