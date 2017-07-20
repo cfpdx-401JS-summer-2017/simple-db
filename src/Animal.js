@@ -1,10 +1,6 @@
-class Animal {
-  constructor (animal) {
-    this._id = animal.id
-    this.name = animal.name
-  }
 
-  save (name, id) {
+
+  save({obj}) {
     const savedAnimal = {name: this.name, _id: this._id}
 
   }
@@ -19,5 +15,5 @@ class Animal {
   remove () {
 
   }
-}
+
 module.exports = Animal
