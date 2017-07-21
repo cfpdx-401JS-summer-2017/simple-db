@@ -1,6 +1,7 @@
 const db = require('../src/db');
 const path = require('path');
-const assert = require('assert');
+const chai = require('chai');
+const assert = chai.assert;
 const rimraf = require('rimraf');
 const store = require('../src/Store');
 
@@ -41,11 +42,19 @@ describe('test db functions', () => {
 
   it('saves new animal object', () => {
     const obj = { name: 'yolanda', color: 'pink' };
-    db.createTable('animals', (err, store) => {
+    // store.save(obj);
+    db.createTable('animals', (err, myStore) => {
+      myStore = new store(myStore.tableDir);
+      myStore.obj = obj;
       if (err) throw ('something went wrong ', err);
       else {
-        store.save(obj, cb);
+        myStore.save(myStore, (err, savedObj) => {
+          console.log(savedObj);
+          // assert();
+        });
       }
     });
-  }), it('gets object from requested table by id', () => {}), it('gets all objects from requested table', () => {}), it('removes the object by id', () => {});
+  });
+
+  // , it('gets object from requested table by id', () => { }), it('gets all objects from requested table', () => { }), it('removes the object by id', () => { });
 });

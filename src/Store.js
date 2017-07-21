@@ -8,7 +8,7 @@ module.exports = class Store {
   }
 
   save(obj, cb) {
-    console.log(obj);
+    console.log('obj: ', obj);
     // creates a _id property for the object
     // saves the object in a file, where the filename is the _id. e.g. if the id is 12345, the file will be 12345.json
     // returns objectToSave with added _id property
@@ -23,6 +23,7 @@ module.exports = class Store {
     // creates file
 
     fs.writeFile;
+    cb(obj);
     // return { name: this.name, _id: this._id, type: this.type };
   }
 
