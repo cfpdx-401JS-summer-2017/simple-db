@@ -43,7 +43,7 @@ describe('test db functions', () => {
 
   it('saves new animal object', () => {
     const obj = { name: 'yolanda', color: 'pink' };
-    db.createTable('buildings', (err, myStore) => {
+    db.createTable('animals', (err, myStore) => {
       myStore = new store(myStore.tableDir);
       myStore.obj = obj;
       if (err) throw err;
