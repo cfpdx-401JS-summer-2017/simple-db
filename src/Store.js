@@ -8,29 +8,22 @@ module.exports = class Store {
   }
 
   save(objToSave, cb) {
-    // console.log(objToSave);
-    // creates a _id property for the object
-    // saves the object in a file, where the filename is the _id. e.g. if the id is 12345, the file will be 12345.json
-    // returns objectToSave with added _id property
     objToSave._id = shortid.generate();
-    // location: objToSave.tableDir
-    // filename: _id.json = objToSave._id
-    // contents: json obj = objToSave.obj
-
     const fileName = objToSave.tableDir + '/' + objToSave._id + '.json';
     const fileContents = objToSave.obj;
-    // console.log('fn: ', fileName);
-
     fs.writeFile(fileName, JSON.stringify(fileContents), err => {
       cb(err, objToSave);
     });
-    // cb(obj);
-    // return { name: this.name, _id: this._id, type: this.type };
   }
 
-  get(id, callback) {
-    //   returns the object from the requested table that has that id
-    // return null if that id does not exist
+  get(id, cb) {
+    const animalPath = process.cwd() + '/tests/data/animals/' + id + '.json';
+    const buildingPath = process.cwd() + '/tests/data/buildings/' + id + '.json';
+    let path = '';
+    fs.existsSync(animalPath) ? (path = animalPath) : (path = buildingPath);
+    fs.readFile(path, (err, retrievedObj) => {
+      cb(err, JSON.parse(retrievedObj));
+    });
   }
   getAll(cb) {
     //   returns array of all objects from the requested table

@@ -43,15 +43,18 @@ describe('test db functions', () => {
 
   it('saves new animal object', () => {
     const obj = { name: 'yolanda', color: 'pink' };
-    db.createTable('animals', (err, myStore) => {
-      // console.log('myStore: ', myStore);
+    db.createTable('buildings', (err, myStore) => {
       myStore = new store(myStore.tableDir);
       myStore.obj = obj;
       if (err) throw err;
       else {
         myStore.save(myStore, (err, savedObj) => {
-          console.log(savedObj);
+          if (err) throw err;
+          myStore.get(savedObj._id, (err, retrievedObj) => {
+            if (err) throw err;
+          });
         });
+        assert.deepEqual(retrievedObj, savedObj);
       }
     });
   }), it('gets object from requested table by id', () => {}), it('gets all objects from requested table', () => {}), it('removes the object by id', () => {});
