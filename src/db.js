@@ -1,12 +1,19 @@
-const db = require('./db');
 const path = require('path');
-const mkdirp = require('');
+const mkdirp = require('mkdirp');
 const Store = require('./Store');
-db.rootDir = path.join(__dirname, '../data');
-const animals = db.createTable('animals');
-const buildings = db.createTable('buildings');
+const rootDir = path.join(__dirname, '../data');
 
-function createTable(typeOfObj) {
-  new Store(path.join(this.rootDir, tablename));
-  callback();
-}
+module.exports = {
+  rootDir: __dirname,
+  createTable(table, cb) {
+    const tableDir = rootDir + '/tests/' + table;
+
+    mkdirp(tableDir, err => {
+      if (err) throw 'the error is ' + err;
+      else {
+        const store = new Store(tableDir);
+        cb(err, table);
+      }
+    });
+  }
+};
