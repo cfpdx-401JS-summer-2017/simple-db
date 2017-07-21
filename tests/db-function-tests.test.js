@@ -54,7 +54,5 @@ describe('test db functions', () => {
         });
       }
     });
-  });
-
-  // , it('gets object from requested table by id', () => { }), it('gets all objects from requested table', () => { }), it('removes the object by id', () => { });
+  }), it('gets object from requested table by id', () => {}), it('gets all objects from requested table', () => {}), it('removes the object by id', () => {});
 });

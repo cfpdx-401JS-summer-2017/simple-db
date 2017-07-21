@@ -7,23 +7,22 @@ module.exports = class Store {
     this.tableDir = tableDir;
   }
 
-  save(obj, cb) {
-    console.log('obj: ', obj);
+  save(objToSave, cb) {
     // creates a _id property for the object
     // saves the object in a file, where the filename is the _id. e.g. if the id is 12345, the file will be 12345.json
     // returns objectToSave with added _id property
-    const objToSave = obj;
     objToSave._id = shortid.generate();
-    for (prop in obj) {
-      console.log(prop, obj, obj[prop]);
-    }
+    // location: objToSave.tableDir
+    // filename: _id.json = objToSave._id
+    // contents: json obj = objToSave.obj
 
-    // console.log(obj);
+    const fileName = objToSave.tableDir + '/' + objToSave._id + '.json';
+    const fileContents = objToSave.obj;
 
-    // creates file
-
-    fs.writeFile;
-    cb(obj);
+    fs.writeFile(fileName, JSON.stringify(fileContents), err => {
+      cb(err, objToSave);
+    });
+    // cb(obj);
     // return { name: this.name, _id: this._id, type: this.type };
   }
 
