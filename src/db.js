@@ -7,7 +7,6 @@ module.exports = {
   rootDir: __dirname,
   createTable(table, cb) {
     const tableDir = rootDir + '/' + table;
-
     mkdirp(tableDir, err => {
       if (err) throw 'the error is ' + err;
       else {

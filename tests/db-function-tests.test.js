@@ -1,5 +1,6 @@
 const db = require('../src/db');
 const path = require('path');
+const fs = require('fs');
 const chai = require('chai');
 const assert = chai.assert;
 const rimraf = require('rimraf');
@@ -42,15 +43,14 @@ describe('test db functions', () => {
 
   it('saves new animal object', () => {
     const obj = { name: 'yolanda', color: 'pink' };
-    // store.save(obj);
     db.createTable('animals', (err, myStore) => {
+      // console.log('myStore: ', myStore);
       myStore = new store(myStore.tableDir);
       myStore.obj = obj;
-      if (err) throw ('something went wrong ', err);
+      if (err) throw err;
       else {
         myStore.save(myStore, (err, savedObj) => {
           console.log(savedObj);
-          // assert();
         });
       }
     });
