@@ -1,18 +1,17 @@
 const fs = require('fs');
-const db = require('./db');
+const path = require('path');
 const shortid = require('shortid');
 
 module.exports = class Store {
-  constructor(tableDir) {
-    this.tableDir = tableDir;
+  constructor(dirName) {
+    this.dirName = dirName;
   }
 
-  save(objToSave, cb) {
-    objToSave._id = shortid.generate();
-    const fileName = objToSave.tableDir + '/' + objToSave._id + '.json';
-    const fileContents = objToSave.obj;
-    fs.writeFile(fileName, JSON.stringify(fileContents), err => {
-      cb(err, objToSave);
+  save(obj, cb) {
+    obj._id = shortid.generate();
+    const fileName = path.join(this.dirName, obj._id + '.json');
+    fs.writeFile(fileName, JSON.stringify(obj), err => {
+      cb(err, obj);
     });
   }
 
@@ -25,28 +24,33 @@ module.exports = class Store {
       cb(err, JSON.parse(retrievedObj));
     });
   }
-  getAll(cb) {
-    //   returns array of all objects from the requested table
-    // return empty array [] when no objects
+
+  getAll(tableType, cb) {
+    const path = process.cwd() + '/tests/data/' + tableType;
+    fs.readdir(path, (err, files) => {
+      cb(err, files);
+    });
   }
 
   remove(id, cb) {
-    // return removed = true or removed = false;
+    console.log('in remove: ', id);
+    const animalPath = process.cwd() + '/tests/data/animals/' + id + '.json';
+    const buildingPath = process.cwd() + '/tests/data/buildings/' + id + '.json';
+    let path = '';
+    fs.existsSync(animalPath) ? (path = animalPath) : (path = buildingPath);
+    console.log(path);
+    fs.unlink(path, err => {
+      let success = 'yay!';
+      console.log(path);
+      console.log(err);
+      cb(err, status);
+      // return removed = true or removed = false;
+      // cb(err, JSON.parse(retrievedObj));
+    });
   }
 };
 /*
-.save(<objectToSave>, callback)
-creates a _id property for the object
-saves the object in a file, where the filename is the _id. e.g. if the id is 12345, the file will be 12345.json
-returns objectToSave with added _id property
 
-.get(<id>, callback)
-returns the object from the requested table that has that id
-return null if that id does not exist
-
-.getAll(callback)
-returns array of all objects from the requested table
-return empty array [] when no objects
 
 .remove(<id>, callback)
 removes the object
