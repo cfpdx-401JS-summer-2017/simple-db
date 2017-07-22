@@ -9,49 +9,30 @@ module.exports = class Store {
 
   save(obj, cb) {
     obj._id = shortid.generate();
-    const fileName = path.join(this.dirName, obj._id + '.json');
-    fs.writeFile(fileName, JSON.stringify(obj), err => {
+    const filePath = path.join(this.dirName, obj._id + '.json');
+    fs.writeFile(filePath, JSON.stringify(obj), err => {
       cb(err, obj);
     });
   }
 
   get(id, cb) {
-    const animalPath = process.cwd() + '/tests/data/animals/' + id + '.json';
-    const buildingPath = process.cwd() + '/tests/data/buildings/' + id + '.json';
-    let path = '';
-    fs.existsSync(animalPath) ? (path = animalPath) : (path = buildingPath);
-    fs.readFile(path, (err, retrievedObj) => {
-      cb(err, JSON.parse(retrievedObj));
+    const filePath = path.join(this.dirName, id + '.json');
+    fs.readFile(filePath, (err, obj) => {
+      cb(err, JSON.parse(obj));
     });
   }
 
   getAll(tableType, cb) {
-    const path = process.cwd() + '/tests/data/' + tableType;
-    fs.readdir(path, (err, files) => {
+    const dirPath = path.join(this.dirName);
+    fs.readdir(dirPath, (err, files) => {
       cb(err, files);
     });
   }
 
   remove(id, cb) {
-    console.log('in remove: ', id);
-    const animalPath = process.cwd() + '/tests/data/animals/' + id + '.json';
-    const buildingPath = process.cwd() + '/tests/data/buildings/' + id + '.json';
-    let path = '';
-    fs.existsSync(animalPath) ? (path = animalPath) : (path = buildingPath);
-    console.log(path);
-    fs.unlink(path, err => {
-      let success = 'yay!';
-      console.log(path);
-      console.log(err);
-      cb(err, status);
-      // return removed = true or removed = false;
-      // cb(err, JSON.parse(retrievedObj));
+    const filePath = path.join(this.dirName, id + '.json');
+    fs.unlink(filePath, err => {
+      cb(err);
     });
   }
 };
-/*
-
-
-.remove(<id>, callback)
-removes the object
-return { removed: true } or { removed: false } */
