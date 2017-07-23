@@ -1,27 +1,89 @@
 {
-  "env": {
-    "node": true,
-    "mocha": true,
-    "es6": true
-  },
-  "extends": "eslint:recommended",
-  "rules": {
-    "no-console": "warn",
-    "indent": [
-      "warn",
-      2
-    ],
-    "linebreak-style": [
-      "error",
-      "unix"
-    ],
-    "quotes": [
-      "error",
-      "single"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ]
-  }
+	"env": {
+		"es6": true,
+		"mocha": true,
+		"node": true
+	},
+	"extends": "eslint:recommended",
+	"parserOptions": {
+		"ecmaVersion": 6
+	},
+	"rules": {
+		"array-bracket-newline": [
+			"error",
+			"never"
+		],
+		"array-element-newline": [
+			"error",
+			"never"
+		],
+		"block-spacing": "error",
+		"brace-style": [
+			"warn",
+			"1tbs",
+			{
+				"allowSingleLine": true
+			}
+		],
+		"curly": [
+			"warn",
+			"multi-line"
+		],
+		"indent": [
+			"warn",
+			2
+		],
+		"linebreak-style": [
+			"error",
+			"unix"
+		],
+		"newline-per-chained-call": [
+			"error",
+			{
+				"ignoreChainWithDepth": 2
+			}
+		],
+		"no-console": "warn",
+		"no-var": "warn",
+		"nonblock-statement-body-position": [
+			"warn",
+			"beside"
+		],
+		"object-curly-newline": [
+			"warn",
+			"always"
+		],
+		"prefer-arrow-callback": [
+			"warn",
+			{
+				"allowNamedFunctions": true
+			}
+		],
+		"prefer-destructuring": [
+			"warn",
+			{
+				"array": true,
+				"object": true
+			},
+			{
+				"enforceForRenamedProperties": false
+			}
+		],
+		"quotes": [
+			"error",
+			"single"
+		],
+		"semi": [
+			"error",
+			"always"
+		],
+		"sort-keys": [
+			"warn",
+			"asc",
+			{
+				"caseSensitive": false,
+				"natural": true
+			}
+		]
+	}
 }
