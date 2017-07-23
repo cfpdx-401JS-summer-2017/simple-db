@@ -64,6 +64,7 @@ describe("test db functions", () => {
       })
       .then(() => {
         assert.doesNotHaveAnyKeys(elephant);
+        elephant = null;
       })
   });
 });
