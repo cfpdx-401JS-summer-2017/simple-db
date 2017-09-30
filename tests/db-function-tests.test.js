@@ -1,71 +1,50 @@
 const promisify = require("util").promisify;
-const db = require("../src/db");
+const {createTable} = require("../src/db");
 const rimraf = promisify(require("rimraf"));
 const path = require("path");
 const chai = require("chai");
 const assert = chai.assert;
-
-// table is the directory! ie., animals or buildings!
-// store is the individual obj - file in the directory!
 
 describe("test db functions", () => {
   const DATA_DIR = path.join(__dirname, "data");
   let animals = null;
   let buildings = null;
 
-  before(() => {
-    return rimraf(DATA_DIR).then();
+  before(async () => {
+    await rimraf(DATA_DIR).then();
+    await createTable("animals").then(db => (animals = db));
+    await createTable("buildings").then(db => (buildings = db));
   });
 
-  before(() => {
-    return db
-      .createTable("animals")
-      .then(db => (animals = db));
-  });
+  it("saves new animal object", async () => {
+    let newAnimal = {
+      color: "blue",
+      name: "ruby"
+    };
+    const savedElephant = await animals.save(newAnimal)
+    assert.deepEqual(newAnimal.name, savedElephant.name);
 
-  before(() => {
-    return db
-      .createTable("buildings")
-      .then(db => (buildings = db));
-  });
-
-  it("saves new animal object", () => {
-    let newAnimal = { color: "blue", name: "ruby" };
-    return animals
-      .save(newAnimal)
-      .then(elephant => {
-        assert.deepEqual(newAnimal.name, elephant.name);
-      });
-  }), it("gets object from requested table by id", () => {
-    let newBuilding = { name: "skyscraper", numOfStories: "100" };
-    return buildings
-      .save(newBuilding)
-      .then(skyscraper => {
-        buildings
-          .get(skyscraper._id)
-          .then(obj => {
-            assert.deepEqual(newBuilding.name, skyscraper.name);
-          });
-      });
-  }), it("gets all objects from requested table", () => {
-    return animals
-      .getAll("animals")
-      .then(stores => {
-        (stores.length < 1) ? assert.deepEqual([], stores) : assert.isArray(stores);
-      });
-  }), it("removes the object by id", () => {
-    let newAnimal = { color: "orange", name: "josephina" };
-    let elephant = {};
-    return animals
-      .save(newAnimal)
-      .then(elephant => {
-        animals
-          .remove(elephant._id)
-      })
-      .then(() => {
-        assert.doesNotHaveAnyKeys(elephant);
-        elephant = null;
-      })
+  }), it("gets object from requested table by id", async () => {
+    let newBuilding = {
+      name: "skyscraper",
+      numOfStories: "100"
+    };
+    const savedSkyscraper = await buildings.save(newBuilding)
+    let retrievedSkyscraper = await buildings.get(savedSkyscraper._id)
+    retrievedSkyscraper = JSON.parse(retrievedSkyscraper)
+    assert.equal(newBuilding.name, retrievedSkyscraper.name);
+  }), it("gets all objects from requested table", async () => {
+    let allAnimals = await animals.getAll("animals")
+    allAnimals.length < 1 ? assert.deepEqual([], allAnimals) : assert.isArray(allAnimals);
+  }), it("removes the object by id", async () => {
+    let axolotl = {
+      color: "orange",
+      name: "josephina"
+    };
+    newAxolotl = await animals.save(axolotl)
+    const removedAxolotl = await animals.remove(newAxolotl._id)
+    assert.equal(axolotl.name, newAxolotl.name)
+    assert.isUndefined(removedAxolotl)
   });
 });
 

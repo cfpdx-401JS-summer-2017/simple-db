@@ -5,9 +5,9 @@ const Store = require('./Store');
 const rootDir = path.join(__dirname, '../tests/data');
 
 module.exports = {
-  rootDir: rootDir,
   createTable(table) {
     const tableDir = path.join(rootDir, '/', table);
     return mkdirp(tableDir).then(() => new Store(tableDir));
-  }
+  },
+  rootDir: rootDir
 };
